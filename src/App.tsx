@@ -9,6 +9,8 @@ import Signup from "./pages/Signup";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
+import Modules from "./pages/Modules";
+import Visualization from "./pages/Visualization";
 import OceanBackground from "./components/OceanBackground";
 import Navbar from "./components/Navbar";
 import ChatbotOctopus from "./components/ChatbotOctopus";
@@ -29,8 +31,8 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/visualization" element={<div className="pt-32 px-6 text-center"><h1 className="text-3xl text-gradient-aqua">Visualization Dashboard - Coming Soon</h1></div>} />
-          <Route path="/modules" element={<div className="pt-32 px-6 text-center"><h1 className="text-3xl text-gradient-aqua">Research Modules - Coming Soon</h1></div>} />
+          <Route path="/visualization" element={<Visualization />} />
+          <Route path="/modules" element={<Modules />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

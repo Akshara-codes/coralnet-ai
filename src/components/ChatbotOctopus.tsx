@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send } from 'lucide-react';
+import { MessageSquare, X, Send, Maximize2, Minimize2 } from 'lucide-react';
 
 const ChatbotOctopus = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([
     {
@@ -100,7 +101,11 @@ const ChatbotOctopus = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed bottom-24 right-6 w-80 h-96 glass-panel z-40 overflow-hidden"
+            className={`fixed glass-panel z-40 overflow-hidden ${
+              isFullscreen 
+                ? 'inset-4 w-auto h-auto' 
+                : 'bottom-24 right-6 w-80 h-96'
+            }`}
             initial={{ opacity: 0, scale: 0, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0, y: 50 }}
@@ -115,16 +120,31 @@ const ChatbotOctopus = () => {
                   <p className="text-xs text-muted-foreground">Online</p>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="p-1 hover:bg-glass-bg/30 rounded-lg transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setIsFullscreen(!isFullscreen)}
+                  className="p-1 hover:bg-glass-bg/30 rounded-lg transition-colors"
+                  title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
+                >
+                  {isFullscreen ? (
+                    <Minimize2 className="w-4 h-4" />
+                  ) : (
+                    <Maximize2 className="w-4 h-4" />
+                  )}
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="p-1 hover:bg-glass-bg/30 rounded-lg transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
-            <div className="flex-1 p-4 h-64 overflow-y-auto space-y-3">
+            <div className={`flex-1 p-4 overflow-y-auto space-y-3 ${
+              isFullscreen ? 'h-[calc(100vh-12rem)]' : 'h-64'
+            }`}>
               {messages.map((msg) => (
                 <motion.div
                   key={msg.id}
