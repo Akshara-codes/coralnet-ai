@@ -28,7 +28,7 @@ const Navbar = () => {
             <Waves className="w-6 h-6 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-gradient-aqua">Marine Bio Platform</h1>
+            <h1 className="text-xl font-bold text-gradient-aqua">Oceanopedia</h1>
             <p className="text-xs text-muted-foreground">AI-Driven Ocean Insights</p>
           </div>
         </Link>

@@ -73,6 +73,88 @@ const Contact = () => {
           </p>
         </motion.div>
 
+        {/* API Documentation Section */}
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <div className="glass-panel p-8">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="p-3 rounded-lg bg-primary/20 text-primary">
+                <Globe className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gradient-aqua">
+                  API Documentation
+                </h2>
+                <p className="text-muted-foreground">
+                  Complete developer resources for platform integration
+                </p>
+              </div>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="glass-panel p-6 hover:bg-glass-bg/30 transition-all duration-300">
+                <h3 className="text-lg font-semibold mb-3 text-foreground">REST API</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Access marine biodiversity data through our comprehensive REST endpoints
+                </p>
+                <motion.button
+                  className="w-full bg-primary/20 text-primary py-2 px-4 rounded-lg hover:bg-primary/30 transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  View REST Docs
+                </motion.button>
+              </div>
+              
+              <div className="glass-panel p-6 hover:bg-glass-bg/30 transition-all duration-300">
+                <h3 className="text-lg font-semibold mb-3 text-foreground">GraphQL API</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Query complex marine data relationships with flexible GraphQL interface
+                </p>
+                <motion.button
+                  className="w-full bg-secondary/20 text-secondary py-2 px-4 rounded-lg hover:bg-secondary/30 transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Explore GraphQL
+                </motion.button>
+              </div>
+              
+              <div className="glass-panel p-6 hover:bg-glass-bg/30 transition-all duration-300">
+                <h3 className="text-lg font-semibold mb-3 text-foreground">SDK & Libraries</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Python, R, and JavaScript libraries for seamless integration
+                </p>
+                <motion.button
+                  className="w-full bg-accent/20 text-accent py-2 px-4 rounded-lg hover:bg-accent/30 transition-all duration-300"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Download SDKs
+                </motion.button>
+              </div>
+            </div>
+            
+            <div className="mt-6 p-4 bg-primary/10 rounded-lg border border-primary/20">
+              <div className="flex items-start space-x-3">
+                <div className="p-1 rounded bg-primary/20">
+                  <Globe className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-medium text-foreground mb-1">API Access Keys</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Contact our team to obtain API credentials and access tokens for platform integration.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
           <motion.div
