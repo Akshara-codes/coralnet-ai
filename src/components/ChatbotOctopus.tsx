@@ -166,10 +166,10 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className={`fixed glass-panel z-[45] overflow-hidden ${
+            className={`fixed glass-panel z-[45] flex flex-col ${
               isFullscreen 
                 ? 'inset-4 w-auto h-auto' 
-                : 'bottom-24 right-6 w-80 h-96'
+                : 'bottom-24 right-6 w-96 h-[600px]'
             }`}
             initial={{ opacity: 0, scale: 0, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -177,7 +177,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-glass-border/30 relative z-[55]">
+            <div className="flex items-center justify-between p-4 border-b border-glass-border/30 flex-shrink-0">
               <div className="flex items-center space-x-2">
                 <span className="text-xl">🐙</span>
                 <div>
@@ -206,46 +206,56 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
               </div>
             </div>
 
-            {/* Messages */}
-            <div className={`flex-1 p-4 overflow-y-auto space-y-3 ${
-              isFullscreen ? 'h-[calc(100vh-12rem)]' : 'h-64'
-            }`}>
+            {/* Messages - Scrollable like ChatGPT */}
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 min-h-0">
               {messages.map((msg) => (
                 <motion.div
                   key={msg.id}
-                  className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}
+                  className={`flex items-start space-x-3 ${msg.isBot ? 'justify-start' : 'justify-end'}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                 >
+                  {msg.isBot && (
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm">🐙</span>
+                    </div>
+                  )}
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
+                    className={`max-w-[75%] p-3 rounded-lg ${
                       msg.isBot
-                        ? 'bg-glass-bg/30 text-foreground'
-                        : 'bg-primary/20 text-primary-foreground'
+                        ? 'bg-muted/50 text-foreground'
+                        : 'bg-primary text-primary-foreground ml-auto'
                     }`}
                   >
-                    <p className="text-sm">{msg.text}</p>
+                    <p className="text-sm leading-relaxed">{msg.text}</p>
                   </div>
+                  {!msg.isBot && (
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm text-primary-foreground">U</span>
+                    </div>
+                  )}
                 </motion.div>
               ))}
             </div>
 
-            {/* Trending Searches */}
-            <div className="p-4 border-t border-glass-border/30">
-              <h4 className="text-sm font-medium text-foreground mb-3">Trending Searches</h4>
-              <div className="space-y-2 mb-4">
-                {trendingSearches.map((search, index) => (
-                  <motion.button
-                    key={index}
-                    onClick={() => handleTrendingClick(search)}
-                    className="w-full text-left p-2 text-xs bg-glass-bg/20 border border-glass-border/20 rounded-lg hover:bg-primary/10 hover:border-primary/30 transition-all duration-200"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {search}
-                  </motion.button>
-                ))}
+            {/* Trending Searches & Input - Sticky at bottom */}
+            <div className="border-t border-glass-border/30 p-4 flex-shrink-0">
+              {/* Trending Pills */}
+              <div className="mb-4">
+                <div className="flex flex-wrap gap-2">
+                  {trendingSearches.map((search, index) => (
+                    <motion.button
+                      key={index}
+                      onClick={() => handleTrendingClick(search)}
+                      className="px-3 py-1 text-xs bg-muted/30 border border-border/30 rounded-full hover:bg-primary/10 hover:border-primary/30 transition-all duration-200 text-left"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {search.length > 50 ? search.substring(0, 50) + '...' : search}
+                    </motion.button>
+                  ))}
+                </div>
               </div>
               
               {/* Input */}
@@ -256,11 +266,12 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                   placeholder="Ask about marine data..."
-                  className="flex-1 bg-glass-bg/30 border border-glass-border/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  className="flex-1 bg-muted/30 border border-border/30 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50"
                 />
                 <button
                   onClick={handleSendMessage}
-                  className="p-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors"
+                  className="px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
+                  disabled={!message.trim()}
                 >
                   <Send className="w-4 h-4" />
                 </button>

@@ -149,52 +149,13 @@ const About = () => {
           </div>
         </motion.div>
 
-        {/* Team Section */}
-        <motion.div
-          className="mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.0 }}
-        >
-          <h2 className="text-3xl font-bold text-center mb-12 text-gradient-aqua">
-            Research Leadership Team
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {teamMembers.map((member, index) => (
-              <motion.div
-                key={member.name}
-                className="glass-panel p-6 text-center hover:bg-glass-bg/30 transition-all duration-300"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 1.2 + index * 0.1 }}
-                whileHover={{ scale: 1.02, boxShadow: 'var(--glow-aqua)' }}
-              >
-                <div className="text-4xl mb-4 p-4 rounded-full bg-primary/20 inline-block">
-                  {member.avatar}
-                </div>
-                <h3 className="text-lg font-semibold mb-1 text-foreground">
-                  {member.name}
-                </h3>
-                <p className="text-primary text-sm font-medium mb-1">
-                  {member.role}
-                </p>
-                <p className="text-muted-foreground text-xs mb-2">
-                  {member.institution}
-                </p>
-                <span className="inline-block px-3 py-1 rounded-full bg-secondary/20 text-secondary text-xs">
-                  {member.expertise}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
 
         {/* Partnerships */}
         <motion.div
           className="glass-panel p-8 text-center"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.6 }}
+          transition={{ duration: 0.8, delay: 1.2 }}
         >
           <h2 className="text-3xl font-bold mb-6 text-gradient-aqua">
             Institutional Partnerships
