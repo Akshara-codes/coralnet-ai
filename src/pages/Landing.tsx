@@ -165,7 +165,9 @@ const Landing = () => {
                     to={link.path}
                     onClick={link.path === '#chatbot' ? (e) => {
                       e.preventDefault();
-                      // This will trigger the chatbot when implemented
+                      if (window.openChatbot) {
+                        window.openChatbot();
+                      }
                     } : undefined}
                   >
                     <motion.div

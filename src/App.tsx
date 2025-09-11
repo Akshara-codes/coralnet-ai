@@ -15,6 +15,18 @@ import OceanBackground from "./components/OceanBackground";
 import Navbar from "./components/Navbar";
 import ChatbotOctopus from "./components/ChatbotOctopus";
 
+// Create a global function to open chatbot
+declare global {
+  interface Window {
+    openChatbot: () => void;
+  }
+}
+
+window.openChatbot = () => {
+  const event = new CustomEvent('openChatbot');
+  window.dispatchEvent(event);
+};
+
 const queryClient = new QueryClient();
 
 const App = () => (

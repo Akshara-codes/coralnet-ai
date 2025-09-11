@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, X, Send, Maximize2, Minimize2 } from 'lucide-react';
 
-const ChatbotOctopus = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const ChatbotOctopus = ({ forceOpen = false }) => {
+  const [isOpen, setIsOpen] = useState(forceOpen);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [message, setMessage] = useState('');
+  const [showTooltip, setShowTooltip] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -13,6 +14,43 @@ const ChatbotOctopus = () => {
       isBot: true
     }
   ]);
+
+  const trendingSearches = [
+    "How do ocean parameters affect fish distribution patterns?",
+    "How can I correlate water quality with marine biodiversity changes?",
+    "How is ocean warming affecting marine ecosystems in the Indian Ocean?",
+    "How do tidal forces influence coastal ecosystems?"
+  ];
+
+  useEffect(() => {
+    if (forceOpen) {
+      setIsOpen(true);
+    }
+  }, [forceOpen]);
+
+  useEffect(() => {
+    // Show tooltip after component mounts
+    const timer = setTimeout(() => {
+      if (!isOpen) {
+        setShowTooltip(true);
+        // Hide tooltip after 5 seconds
+        setTimeout(() => setShowTooltip(false), 5000);
+      }
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [isOpen]);
+
+  useEffect(() => {
+    // Listen for global chatbot open events
+    const handleOpenChatbot = () => {
+      setIsOpen(true);
+      setShowTooltip(false);
+    };
+
+    window.addEventListener('openChatbot', handleOpenChatbot);
+    return () => window.removeEventListener('openChatbot', handleOpenChatbot);
+  }, []);
 
   const handleSendMessage = () => {
     if (!message.trim()) return;
@@ -37,27 +75,35 @@ const ChatbotOctopus = () => {
     }, 1000);
   };
 
+  const handleTrendingClick = (searchText) => {
+    setMessage(searchText);
+  };
+
   return (
     <>
       {/* Floating Octopus Button */}
-      <motion.button
-        className="fixed bottom-6 right-6 z-50 p-4 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 aqua-glow"
-        onClick={() => setIsOpen(!isOpen)}
-        whileHover={{ 
-          scale: 1.1,
-          rotateZ: [0, -5, 5, 0],
-          transition: { duration: 0.6 }
-        }}
-        whileTap={{ scale: 0.9 }}
-        animate={{
-          y: [0, -10, 0],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
+      <div className="fixed bottom-6 right-6 z-50">
+        <motion.button
+          className="p-4 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 aqua-glow relative"
+          onClick={() => {
+            setIsOpen(!isOpen);
+            setShowTooltip(false);
+          }}
+          whileHover={{ 
+            scale: 1.1,
+            rotateZ: [0, -5, 5, 0],
+            transition: { duration: 0.6 }
+          }}
+          whileTap={{ scale: 0.9 }}
+          animate={{
+            y: [0, -10, 0],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
         <div className="text-2xl">🐙</div>
         
         {/* Tentacle animations */}
@@ -95,13 +141,32 @@ const ChatbotOctopus = () => {
             delay: 0.7
           }}
         />
-      </motion.button>
+        </motion.button>
+
+        {/* Notification Tooltip */}
+        <AnimatePresence>
+          {showTooltip && !isOpen && (
+            <motion.div
+              className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-glass-panel border border-primary/30 rounded-lg shadow-lg"
+              initial={{ opacity: 0, scale: 0.8, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 10 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="text-sm text-foreground">
+                🐙 Hello! I'm your marine research assistant. How can I help you explore our ocean data today?
+              </div>
+              <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-glass-panel border-r border-b border-primary/30"></div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className={`fixed glass-panel z-40 overflow-hidden ${
+            className={`fixed glass-panel z-[45] overflow-hidden ${
               isFullscreen 
                 ? 'inset-4 w-auto h-auto' 
                 : 'bottom-24 right-6 w-80 h-96'
@@ -112,7 +177,7 @@ const ChatbotOctopus = () => {
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-glass-border/30 relative z-50">
+            <div className="flex items-center justify-between p-4 border-b border-glass-border/30 relative z-[55]">
               <div className="flex items-center space-x-2">
                 <span className="text-xl">🐙</span>
                 <div>
@@ -166,8 +231,24 @@ const ChatbotOctopus = () => {
               ))}
             </div>
 
-            {/* Input */}
+            {/* Trending Searches */}
             <div className="p-4 border-t border-glass-border/30">
+              <h4 className="text-sm font-medium text-foreground mb-3">Trending Searches</h4>
+              <div className="space-y-2 mb-4">
+                {trendingSearches.map((search, index) => (
+                  <motion.button
+                    key={index}
+                    onClick={() => handleTrendingClick(search)}
+                    className="w-full text-left p-2 text-xs bg-glass-bg/20 border border-glass-border/20 rounded-lg hover:bg-primary/10 hover:border-primary/30 transition-all duration-200"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {search}
+                  </motion.button>
+                ))}
+              </div>
+              
+              {/* Input */}
               <div className="flex space-x-2">
                 <input
                   type="text"
