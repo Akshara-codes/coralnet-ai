@@ -82,9 +82,9 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
   return (
     <>
       {/* Floating Octopus Button */}
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-6 z-[90]">
         <motion.button
-          className="p-4 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 aqua-glow relative"
+          className="w-14 h-14 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 aqua-glow relative flex items-center justify-center shadow-lg"
           onClick={() => {
             setIsOpen(!isOpen);
             setShowTooltip(false);
@@ -96,10 +96,10 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
           }}
           whileTap={{ scale: 0.9 }}
           animate={{
-            y: [0, -10, 0],
+            y: [0, -8, 0],
           }}
           transition={{
-            duration: 4,
+            duration: 3,
             repeat: Infinity,
             ease: "easeInOut"
           }}
@@ -143,127 +143,155 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
         />
         </motion.button>
 
-        {/* Notification Tooltip */}
+        {/* Welcome Toast */}
         <AnimatePresence>
           {showTooltip && !isOpen && (
             <motion.div
-              className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-glass-panel border border-primary/30 rounded-lg shadow-lg"
+              className="absolute bottom-full right-0 mb-4 w-72 p-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border border-primary/20 rounded-xl shadow-xl"
               initial={{ opacity: 0, scale: 0.8, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: 10 }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.4, type: "spring" }}
             >
-              <div className="text-sm text-foreground">
-                🐙 Hello! I'm your marine research assistant. How can I help you explore our ocean data today?
+              <div className="flex items-start space-x-3">
+                <div className="text-xl">🐙</div>
+                <div className="text-sm text-foreground leading-relaxed">
+                  Hello! I'm your marine research assistant. How can I help you explore our ocean data today?
+                </div>
               </div>
-              <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-glass-panel border-r border-b border-primary/30"></div>
+              <div className="absolute bottom-0 right-6 transform translate-y-1/2 rotate-45 w-3 h-3 bg-white/95 dark:bg-gray-900/95 border-r border-b border-primary/20"></div>
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Chat Window */}
+      {/* ChatGPT-style Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className={`fixed glass-panel z-[45] overflow-hidden ${
+            className={`fixed bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border border-gray-200/50 dark:border-gray-700/50 z-[85] overflow-hidden shadow-2xl ${
               isFullscreen 
-                ? 'inset-4 w-auto h-auto' 
-                : 'bottom-24 right-6 w-80 h-96'
+                ? 'inset-4 rounded-2xl' 
+                : 'bottom-24 right-6 w-96 h-[32rem] rounded-2xl'
             }`}
-            initial={{ opacity: 0, scale: 0, y: 50 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0, y: 50 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ duration: 0.3, type: "spring" }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-glass-border/30 relative z-[55]">
-              <div className="flex items-center space-x-2">
-                <span className="text-xl">🐙</span>
+            <div className="flex items-center justify-between p-4 border-b border-gray-200/50 dark:border-gray-700/50 bg-gray-50/50 dark:bg-gray-800/50">
+              <div className="flex items-center space-x-3">
+                <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+                  <span className="text-lg">🐙</span>
+                </div>
                 <div>
-                  <h3 className="font-semibold">Marine AI Assistant</h3>
-                  <p className="text-xs text-muted-foreground">Online</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-gray-100">Marine AI Assistant</h3>
+                  <p className="text-xs text-green-500 flex items-center">
+                    <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                    Online
+                  </p>
                 </div>
               </div>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
                 <button
                   onClick={() => setIsFullscreen(!isFullscreen)}
-                  className="p-1 hover:bg-glass-bg/30 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 rounded-lg transition-colors"
                   title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
                 >
                   {isFullscreen ? (
-                    <Minimize2 className="w-4 h-4" />
+                    <Minimize2 className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                   ) : (
-                    <Maximize2 className="w-4 h-4" />
+                    <Maximize2 className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                   )}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1 hover:bg-glass-bg/30 rounded-lg transition-colors"
+                  className="p-2 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 rounded-lg transition-colors"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-4 h-4 text-gray-600 dark:text-gray-400" />
                 </button>
               </div>
             </div>
 
-            {/* Messages */}
-            <div className={`flex-1 p-4 overflow-y-auto space-y-3 ${
-              isFullscreen ? 'h-[calc(100vh-12rem)]' : 'h-64'
+            {/* Messages Section */}
+            <div className={`flex-1 overflow-y-auto ${
+              isFullscreen ? 'h-[calc(100vh-16rem)]' : 'h-72'
             }`}>
-              {messages.map((msg) => (
+              {messages.map((msg, index) => (
                 <motion.div
                   key={msg.id}
-                  className={`flex ${msg.isBot ? 'justify-start' : 'justify-end'}`}
+                  className={`flex items-start space-x-3 p-4 ${
+                    index % 2 === 0 ? 'bg-gray-50/30 dark:bg-gray-800/30' : 'bg-transparent'
+                  }`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
-                      msg.isBot
-                        ? 'bg-glass-bg/30 text-foreground'
-                        : 'bg-primary/20 text-primary-foreground'
-                    }`}
-                  >
-                    <p className="text-sm">{msg.text}</p>
-                  </div>
+                  {msg.isBot ? (
+                    <>
+                      <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-sm">🐙</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-900 dark:text-gray-100 leading-relaxed">{msg.text}</p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex-1"></div>
+                      <div className="max-w-[75%] bg-primary text-primary-foreground p-3 rounded-2xl rounded-br-md">
+                        <p className="text-sm leading-relaxed">{msg.text}</p>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center flex-shrink-0 mt-1">
+                        <span className="text-sm">👤</span>
+                      </div>
+                    </>
+                  )}
                 </motion.div>
               ))}
             </div>
 
-            {/* Trending Searches */}
-            <div className="p-4 border-t border-glass-border/30">
-              <h4 className="text-sm font-medium text-foreground mb-3">Trending Searches</h4>
-              <div className="space-y-2 mb-4">
-                {trendingSearches.map((search, index) => (
-                  <motion.button
-                    key={index}
-                    onClick={() => handleTrendingClick(search)}
-                    className="w-full text-left p-2 text-xs bg-glass-bg/20 border border-glass-border/20 rounded-lg hover:bg-primary/10 hover:border-primary/30 transition-all duration-200"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {search}
-                  </motion.button>
-                ))}
+            {/* Bottom Section */}
+            <div className="border-t border-gray-200/50 dark:border-gray-700/50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+              {/* Trending Searches Pills */}
+              <div className="p-4 pb-2">
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {trendingSearches.map((search, index) => (
+                    <motion.button
+                      key={index}
+                      onClick={() => handleTrendingClick(search)}
+                      className="px-3 py-1.5 text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full border border-gray-200 dark:border-gray-700 hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all duration-200"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {search.length > 50 ? search.substring(0, 47) + '...' : search}
+                    </motion.button>
+                  ))}
+                </div>
               </div>
               
-              {/* Input */}
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder="Ask about marine data..."
-                  className="flex-1 bg-glass-bg/30 border border-glass-border/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
-                <button
-                  onClick={handleSendMessage}
-                  className="p-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
+              {/* Input Box */}
+              <div className="px-4 pb-4">
+                <div className="flex space-x-3 items-end">
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                      placeholder="Ask about marine data..."
+                      className="w-full bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 pr-12 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 resize-none"
+                    />
+                  </div>
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!message.trim()}
+                    className="p-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
