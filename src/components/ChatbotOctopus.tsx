@@ -1,30 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageSquare, X, Send, Maximize2, Minimize2, Glasses } from 'lucide-react';
-import mermaidDefault from '@/assets/mermaid-default.png';
-import mermaidPrivate from '@/assets/mermaid-private.png';
+import { MessageSquare, X, Send, Maximize2, Minimize2 } from 'lucide-react';
 
 const ChatbotOctopus = ({ forceOpen = false }) => {
   const [isOpen, setIsOpen] = useState(forceOpen);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isPrivateMode, setIsPrivateMode] = useState(false);
   const [message, setMessage] = useState('');
   const [showTooltip, setShowTooltip] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm Mira, your marine research assistant. How can I help you explore our ocean data today?",
+      text: "🐙 Hello! I'm your marine research assistant. How can I help you explore our ocean data today?",
       isBot: true
     }
   ]);
-
-  const privateMessages = [
-    {
-      id: 1,
-      text: "Hey, I am your Marine Assistant, Mira. Welcome to the Private Research Mode! Here you can research freely, we don't save your data.",
-      isBot: true
-    }
-  ];
 
   const trendingSearches = [
     "How do ocean parameters affect fish distribution patterns?",
@@ -72,37 +61,22 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
       isBot: false
     };
 
-    const currentMessages = isPrivateMode ? privateMessages : messages;
-    const setCurrentMessages = isPrivateMode ? 
-      (updater) => { /* Private mode doesn't save data */ } : 
-      setMessages;
-
-    if (!isPrivateMode) {
-      setMessages(prev => [...prev, newMessage]);
-    }
+    setMessages(prev => [...prev, newMessage]);
     setMessage('');
 
     // Simulate bot response
     setTimeout(() => {
       const botResponse = {
         id: Date.now() + 1,
-        text: isPrivateMode 
-          ? "I'm processing your private marine data query. Your data is not being saved in this mode."
-          : "I'm processing your marine data query. This feature will provide AI-powered insights about biodiversity patterns, species correlations, and ecosystem health metrics.",
+        text: "🐙 I'm processing your marine data query. This feature will provide AI-powered insights about biodiversity patterns, species correlations, and ecosystem health metrics.",
         isBot: true
       };
-      if (!isPrivateMode) {
-        setMessages(prev => [...prev, botResponse]);
-      }
+      setMessages(prev => [...prev, botResponse]);
     }, 1000);
   };
 
   const handleTrendingClick = (searchText) => {
     setMessage(searchText);
-  };
-
-  const togglePrivateMode = () => {
-    setIsPrivateMode(!isPrivateMode);
   };
 
   return (
@@ -130,12 +104,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
             ease: "easeInOut"
           }}
         >
-        <img 
-          src={isPrivateMode ? mermaidPrivate : mermaidDefault} 
-          alt="Mira - Marine Assistant" 
-          className="h-10 w-auto object-contain"
-          style={{ background: 'none' }}
-        />
+        <div className="text-2xl">🐙</div>
         
         {/* Tentacle animations */}
         <div className="absolute -top-1 -right-1 w-2 h-6 bg-primary/30 rounded-full origin-bottom animate-pulse" 
@@ -185,7 +154,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
               transition={{ duration: 0.3 }}
             >
               <div className="text-sm text-foreground">
-                Hello! I'm Mira, your marine research assistant. How can I help you explore our ocean data today?
+                🐙 Hello! I'm your marine research assistant. How can I help you explore our ocean data today?
               </div>
               <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-glass-panel border-r border-b border-primary/30"></div>
             </motion.div>
@@ -201,51 +170,25 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
               isFullscreen 
                 ? 'inset-4 w-auto h-auto' 
                 : 'bottom-24 right-6 w-96 h-[600px]'
-            } ${isPrivateMode ? 'dark bg-slate-900/90 border-slate-700/50' : ''}`}
+            }`}
             initial={{ opacity: 0, scale: 0, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0, y: 50 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             {/* Header */}
-            <div className={`flex items-center justify-between p-4 border-b flex-shrink-0 ${
-              isPrivateMode ? 'border-slate-700/50 bg-slate-800/50' : 'border-glass-border/30'
-            }`}>
+            <div className="flex items-center justify-between p-4 border-b border-glass-border/30 flex-shrink-0">
               <div className="flex items-center space-x-2">
-                <img 
-                  src={isPrivateMode ? mermaidPrivate : mermaidDefault} 
-                  alt="Mira - Marine Assistant" 
-                  className="h-8 w-auto object-contain"
-                  style={{ background: 'none' }}
-                />
+                <span className="text-xl">🐙</span>
                 <div>
-                  <h3 className={`font-semibold ${isPrivateMode ? 'text-white' : ''}`}>
-                    Mira - Marine AI Assistant
-                  </h3>
-                  <p className={`text-xs ${isPrivateMode ? 'text-slate-400' : 'text-muted-foreground'}`}>
-                    {isPrivateMode ? 'Private Mode' : 'Online'}
-                  </p>
+                  <h3 className="font-semibold">Marine AI Assistant</h3>
+                  <p className="text-xs text-muted-foreground">Online</p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={togglePrivateMode}
-                  className={`p-1 rounded-lg transition-colors ${
-                    isPrivateMode 
-                      ? 'bg-slate-700/50 hover:bg-slate-600/50 text-white' 
-                      : 'hover:bg-glass-bg/30'
-                  }`}
-                  title={isPrivateMode ? "Exit private mode" : "Enter private mode"}
-                >
-                  <Glasses className="w-4 h-4" />
-                </button>
-                <button
                   onClick={() => setIsFullscreen(!isFullscreen)}
-                  className={`p-1 rounded-lg transition-colors ${
-                    isPrivateMode 
-                      ? 'hover:bg-slate-600/50 text-white' 
-                      : 'hover:bg-glass-bg/30'
-                  }`}
+                  className="p-1 hover:bg-glass-bg/30 rounded-lg transition-colors"
                   title={isFullscreen ? "Exit fullscreen" : "Enter fullscreen"}
                 >
                   {isFullscreen ? (
@@ -256,11 +199,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className={`p-1 rounded-lg transition-colors ${
-                    isPrivateMode 
-                      ? 'hover:bg-slate-600/50 text-white' 
-                      : 'hover:bg-glass-bg/30'
-                  }`}
+                  className="p-1 hover:bg-glass-bg/30 rounded-lg transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -268,10 +207,8 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
             </div>
 
             {/* Messages - Scrollable like ChatGPT */}
-            <div className={`flex-1 overflow-y-auto px-4 py-4 space-y-4 min-h-0 ${
-              isPrivateMode ? 'bg-slate-800/30' : ''
-            }`}>
-              {(isPrivateMode ? privateMessages : messages).map((msg) => (
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4 min-h-0">
+              {messages.map((msg) => (
                 <motion.div
                   key={msg.id}
                   className={`flex items-start space-x-3 ${msg.isBot ? 'justify-start' : 'justify-end'}`}
@@ -280,33 +217,22 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
                   transition={{ duration: 0.3 }}
                 >
                   {msg.isBot && (
-                    <div className="flex items-center justify-center flex-shrink-0" style={{ background: 'none' }}>
-                      <img 
-                        src={isPrivateMode ? mermaidPrivate : mermaidDefault} 
-                        alt="Mira - Marine Assistant" 
-                        className="h-8 w-auto object-contain"
-                        style={{ background: 'none' }}
-                      />
+                    <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm">🐙</span>
                     </div>
                   )}
                   <div
                     className={`max-w-[75%] p-3 rounded-lg ${
                       msg.isBot
-                        ? isPrivateMode 
-                          ? 'bg-slate-700/50 text-white'
-                          : 'bg-muted/50 text-foreground'
-                        : isPrivateMode
-                          ? 'bg-slate-600 text-white ml-auto'
-                          : 'bg-primary text-primary-foreground ml-auto'
+                        ? 'bg-muted/50 text-foreground'
+                        : 'bg-primary text-primary-foreground ml-auto'
                     }`}
                   >
                     <p className="text-sm leading-relaxed">{msg.text}</p>
                   </div>
                   {!msg.isBot && (
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      isPrivateMode ? 'bg-slate-600' : 'bg-primary'
-                    }`}>
-                      <span className={`text-sm ${isPrivateMode ? 'text-white' : 'text-primary-foreground'}`}>U</span>
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm text-primary-foreground">U</span>
                     </div>
                   )}
                 </motion.div>
@@ -314,9 +240,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
             </div>
 
             {/* Trending Searches & Input - Sticky at bottom */}
-            <div className={`border-t p-4 flex-shrink-0 ${
-              isPrivateMode ? 'border-slate-700/50 bg-slate-800/50' : 'border-glass-border/30'
-            }`}>
+            <div className="border-t border-glass-border/30 p-4 flex-shrink-0">
               {/* Trending Pills */}
               <div className="mb-4">
                 <div className="flex flex-wrap gap-2">
@@ -324,11 +248,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
                     <motion.button
                       key={index}
                       onClick={() => handleTrendingClick(search)}
-                      className={`px-3 py-1 text-xs rounded-full transition-all duration-200 text-left ${
-                        isPrivateMode 
-                          ? 'bg-slate-700/50 border border-slate-600/50 text-slate-300 hover:bg-slate-600/50 hover:border-slate-500/50'
-                          : 'bg-muted/30 border border-border/30 hover:bg-primary/10 hover:border-primary/30'
-                      }`}
+                      className="px-3 py-1 text-xs bg-muted/30 border border-border/30 rounded-full hover:bg-primary/10 hover:border-primary/30 transition-all duration-200 text-left"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -345,20 +265,12 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                  placeholder={isPrivateMode ? "Ask privately about marine data..." : "Ask about marine data..."}
-                  className={`flex-1 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 ${
-                    isPrivateMode 
-                      ? 'bg-slate-700/50 border border-slate-600/50 text-white placeholder-slate-400'
-                      : 'bg-muted/30 border border-border/30'
-                  }`}
+                  placeholder="Ask about marine data..."
+                  className="flex-1 bg-muted/30 border border-border/30 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50"
                 />
                 <button
                   onClick={handleSendMessage}
-                  className={`px-4 py-3 rounded-lg transition-colors disabled:opacity-50 ${
-                    isPrivateMode 
-                      ? 'bg-slate-600 text-white hover:bg-slate-500'
-                      : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                  }`}
+                  className="px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
                   disabled={!message.trim()}
                 >
                   <Send className="w-4 h-4" />
