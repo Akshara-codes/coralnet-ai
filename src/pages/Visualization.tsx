@@ -18,6 +18,7 @@ import {
   Zap,
   Eye
 } from 'lucide-react';
+import oceanTemperatureTrends from '@/assets/ocean-temperature-trends.jpg';
 
 const Visualization = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -127,8 +128,12 @@ const Visualization = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Interactive chart will render here</p>
+                  <div className="h-64 rounded-lg overflow-hidden">
+                    <img 
+                      src={oceanTemperatureTrends} 
+                      alt="Ocean Temperature Trends Visualization" 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </CardContent>
               </Card>
