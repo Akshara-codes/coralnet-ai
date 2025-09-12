@@ -13,7 +13,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
   const [messages, setMessages] = useState([
     {
       id: 1,
-      text: "Hello! I'm your marine research assistant. How can I help you explore our ocean data today?",
+      text: "Hello! I'm Mira, your marine research assistant. How can I help you explore our ocean data today?",
       isBot: true
     }
   ]);
@@ -21,7 +21,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
   const privateMessages = [
     {
       id: 1,
-      text: "Hey, I am your Marine Assistant. Welcome to the Private Research Mode! Here you can research freely, we don't save your data.",
+      text: "Hey, I am your Marine Assistant, Mira. Welcome to the Private Research Mode! Here you can research freely, we don't save your data.",
       isBot: true
     }
   ];
@@ -132,8 +132,8 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
         >
         <img 
           src={isPrivateMode ? mermaidPrivate : mermaidDefault} 
-          alt="Marine Assistant" 
-          className="w-8 h-8 object-contain"
+          alt="Mira - Marine Assistant" 
+          className="w-10 h-10 object-cover rounded-full border-2 border-primary/20"
         />
         
         {/* Tentacle animations */}
@@ -184,7 +184,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
               transition={{ duration: 0.3 }}
             >
               <div className="text-sm text-foreground">
-                Hello! I'm your marine research assistant. How can I help you explore our ocean data today?
+                Hello! I'm Mira, your marine research assistant. How can I help you explore our ocean data today?
               </div>
               <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-glass-panel border-r border-b border-primary/30"></div>
             </motion.div>
@@ -213,12 +213,12 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
               <div className="flex items-center space-x-2">
                 <img 
                   src={isPrivateMode ? mermaidPrivate : mermaidDefault} 
-                  alt="Marine Assistant" 
-                  className="w-8 h-8 object-contain"
+                  alt="Mira - Marine Assistant" 
+                  className="w-8 h-8 object-cover rounded-full"
                 />
                 <div>
                   <h3 className={`font-semibold ${isPrivateMode ? 'text-white' : ''}`}>
-                    Marine AI Assistant
+                    Mira - Marine AI Assistant
                   </h3>
                   <p className={`text-xs ${isPrivateMode ? 'text-slate-400' : 'text-muted-foreground'}`}>
                     {isPrivateMode ? 'Private Mode' : 'Online'}
@@ -278,13 +278,13 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
                   transition={{ duration: 0.3 }}
                 >
                   {msg.isBot && (
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      isPrivateMode ? 'bg-slate-700' : 'bg-primary/20'
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border-2 ${
+                      isPrivateMode ? 'border-slate-600' : 'border-primary/20'
                     }`}>
                       <img 
                         src={isPrivateMode ? mermaidPrivate : mermaidDefault} 
-                        alt="Marine Assistant" 
-                        className="w-5 h-5 object-contain"
+                        alt="Mira - Marine Assistant" 
+                        className="w-8 h-8 object-cover rounded-full"
                       />
                     </div>
                   )}
