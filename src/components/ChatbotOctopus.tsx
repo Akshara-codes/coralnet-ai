@@ -133,7 +133,8 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
         <img 
           src={isPrivateMode ? mermaidPrivate : mermaidDefault} 
           alt="Mira - Marine Assistant" 
-          className="w-10 h-10 object-cover rounded-full border-2 border-primary/20"
+          className="h-10 w-auto object-contain"
+          style={{ background: 'none' }}
         />
         
         {/* Tentacle animations */}
@@ -214,7 +215,8 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
                 <img 
                   src={isPrivateMode ? mermaidPrivate : mermaidDefault} 
                   alt="Mira - Marine Assistant" 
-                  className="w-8 h-8 object-cover rounded-full"
+                  className="h-8 w-auto object-contain"
+                  style={{ background: 'none' }}
                 />
                 <div>
                   <h3 className={`font-semibold ${isPrivateMode ? 'text-white' : ''}`}>
@@ -278,13 +280,12 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
                   transition={{ duration: 0.3 }}
                 >
                   {msg.isBot && (
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 border-2 ${
-                      isPrivateMode ? 'border-slate-600' : 'border-primary/20'
-                    }`}>
+                    <div className="flex items-center justify-center flex-shrink-0" style={{ background: 'none' }}>
                       <img 
                         src={isPrivateMode ? mermaidPrivate : mermaidDefault} 
                         alt="Mira - Marine Assistant" 
-                        className="w-8 h-8 object-cover rounded-full"
+                        className="h-8 w-auto object-contain"
+                        style={{ background: 'none' }}
                       />
                     </div>
                   )}
