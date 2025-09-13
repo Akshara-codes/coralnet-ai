@@ -19,6 +19,7 @@ import {
   Eye
 } from 'lucide-react';
 import OceanTemperatureChart from '@/components/OceanTemperatureChart';
+import SpeciesDistributionMap from '@/components/SpeciesDistributionMap';
 
 const Visualization = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -141,11 +142,12 @@ const Visualization = () => {
                     <Globe className="w-5 h-5" />
                     <span>Species Distribution Map</span>
                   </CardTitle>
+                  <CardDescription>
+                    Geographic distribution of marine species with coordinate-based plotting
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64 bg-gradient-to-br from-accent/10 to-primary-glow/10 rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Interactive map will render here</p>
-                  </div>
+                  <SpeciesDistributionMap />
                 </CardContent>
               </Card>
             </div>
