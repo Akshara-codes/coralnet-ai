@@ -18,6 +18,7 @@ import {
   Zap,
   Eye
 } from 'lucide-react';
+import OceanTemperatureChart from '@/components/OceanTemperatureChart';
 
 const Visualization = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -123,13 +124,14 @@ const Visualization = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <LineChart className="w-5 h-5" />
-                    <span>Ocean Temperature Trends</span>
+                    <span>Ocean Temperature Trends (2000-2020)</span>
                   </CardTitle>
+                  <CardDescription>
+                    Historical ocean temperature data showing warming trends over two decades
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-lg flex items-center justify-center">
-                    <p className="text-muted-foreground">Interactive chart will render here</p>
-                  </div>
+                  <OceanTemperatureChart />
                 </CardContent>
               </Card>
 
