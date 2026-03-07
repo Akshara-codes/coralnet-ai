@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Maximize2, Minimize2, Glasses, Loader2 } from 'lucide-react';
+import { X, Send, Maximize2, Minimize2, Glasses, Loader2, Plus } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import mermaidDefault from '@/assets/mermaid-default.png';
 import mermaidPrivate from '@/assets/mermaid-private.png';
 import { streamChat, type ChatMessage } from '@/lib/chatService';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
 
 type DisplayMessage = {
   id: number;
@@ -14,6 +16,7 @@ type DisplayMessage = {
 
 const WELCOME_MESSAGE = "Hello! I'm Mira, your marine research assistant. Ask me anything about ocean ecosystems, marine biodiversity, water quality, or species distribution patterns! 🌊";
 const PRIVATE_WELCOME = "Welcome to Private Research Mode! I'm Mira — your queries here aren't saved. Ask freely about marine data. 🔒";
+const GUEST_WELCOME = "Hello! I'm Mira, your marine research assistant. 🌊 Sign in to save your conversation history, or ask me anything right here!";
 
 const trendingSearches = [
   "How do ocean parameters affect fish distribution patterns?",
@@ -23,15 +26,18 @@ const trendingSearches = [
 ];
 
 const ChatbotOctopus = ({ forceOpen = false }) => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(forceOpen);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isPrivateMode, setIsPrivateMode] = useState(false);
   const [message, setMessage] = useState('');
   const [showTooltip, setShowTooltip] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
 
   const [messages, setMessages] = useState<DisplayMessage[]>([
-    { id: 1, text: WELCOME_MESSAGE, isBot: true }
+    { id: 1, text: user ? WELCOME_MESSAGE : GUEST_WELCOME, isBot: true }
   ]);
   const [privateMessages, setPrivateMessages] = useState<DisplayMessage[]>([
     { id: 1, text: PRIVATE_WELCOME, isBot: true }
@@ -46,10 +52,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
   }, []);
 
   useEffect(() => { scrollToBottom(); }, [currentMessages, scrollToBottom]);
-
-  useEffect(() => {
-    if (forceOpen) setIsOpen(true);
-  }, [forceOpen]);
+  useEffect(() => { if (forceOpen) setIsOpen(true); }, [forceOpen]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -62,17 +65,92 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
   }, [isOpen]);
 
   useEffect(() => {
-    const handleOpenChatbot = () => {
-      setIsOpen(true);
-      setShowTooltip(false);
-    };
+    const handleOpenChatbot = () => { setIsOpen(true); setShowTooltip(false); };
     window.addEventListener('openChatbot', handleOpenChatbot);
     return () => window.removeEventListener('openChatbot', handleOpenChatbot);
   }, []);
 
+  // Load latest conversation when user logs in
+  useEffect(() => {
+    if (user && !isPrivateMode) {
+      loadLatestConversation();
+    } else if (!user) {
+      setConversationId(null);
+      setMessages([{ id: 1, text: GUEST_WELCOME, isBot: true }]);
+    }
+  }, [user]);
+
+  const loadLatestConversation = async () => {
+    if (!user) return;
+    setIsLoadingHistory(true);
+    try {
+      const { data: convs } = await supabase
+        .from('conversations')
+        .select('id')
+        .eq('user_id', user.id)
+        .order('updated_at', { ascending: false })
+        .limit(1);
+
+      if (convs && convs.length > 0) {
+        setConversationId(convs[0].id);
+        const { data: msgs } = await supabase
+          .from('chat_messages')
+          .select('*')
+          .eq('conversation_id', convs[0].id)
+          .order('created_at', { ascending: true });
+
+        if (msgs && msgs.length > 0) {
+          const displayMsgs: DisplayMessage[] = [
+            { id: 1, text: WELCOME_MESSAGE, isBot: true },
+            ...msgs.map((m, i) => ({
+              id: i + 2,
+              text: m.content,
+              isBot: m.role === 'assistant',
+            }))
+          ];
+          setMessages(displayMsgs);
+        } else {
+          setMessages([{ id: 1, text: WELCOME_MESSAGE, isBot: true }]);
+        }
+      } else {
+        setConversationId(null);
+        setMessages([{ id: 1, text: WELCOME_MESSAGE, isBot: true }]);
+      }
+    } catch (e) {
+      console.error('Failed to load conversation:', e);
+    }
+    setIsLoadingHistory(false);
+  };
+
+  const createConversation = async (): Promise<string | null> => {
+    if (!user) return null;
+    const { data, error } = await supabase
+      .from('conversations')
+      .insert({ user_id: user.id, title: 'Chat with Mira' })
+      .select('id')
+      .single();
+    if (error) { console.error('Failed to create conversation:', error); return null; }
+    return data.id;
+  };
+
+  const saveMessage = async (convId: string, role: 'user' | 'assistant', content: string) => {
+    if (!user) return;
+    await supabase.from('chat_messages').insert({
+      conversation_id: convId,
+      user_id: user.id,
+      role,
+      content,
+    });
+  };
+
+  const startNewConversation = () => {
+    setConversationId(null);
+    setMessages([{ id: 1, text: WELCOME_MESSAGE, isBot: true }]);
+  };
+
   const buildChatHistory = (): ChatMessage[] => {
     return currentMessages
-      .filter(m => m.id !== 1) // skip welcome message
+      .filter(m => m.id !== 1)
       .map(m => ({
         role: m.isBot ? 'assistant' as const : 'user' as const,
         content: m.text,
@@ -88,8 +166,19 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
     setMessage('');
     setIsLoading(true);
 
-    const history = [...buildChatHistory(), { role: 'user' as const, content: userText }];
+    // Ensure conversation exists for logged-in users (non-private)
+    let activeConvId = conversationId;
+    if (user && !isPrivateMode && !activeConvId) {
+      activeConvId = await createConversation();
+      if (activeConvId) setConversationId(activeConvId);
+    }
 
+    // Save user message
+    if (user && !isPrivateMode && activeConvId) {
+      await saveMessage(activeConvId, 'user', userText);
+    }
+
+    const history = [...buildChatHistory(), { role: 'user' as const, content: userText }];
     let assistantText = '';
     const assistantId = Date.now() + 1;
 
@@ -105,7 +194,12 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
           return [...prev, { id: assistantId, text: assistantText, isBot: true }];
         });
       },
-      onDone: () => setIsLoading(false),
+      onDone: async () => {
+        setIsLoading(false);
+        if (user && !isPrivateMode && activeConvId && assistantText) {
+          await saveMessage(activeConvId, 'assistant', assistantText);
+        }
+      },
       onError: (error) => {
         setCurrentMessages(prev => [
           ...prev,
@@ -116,13 +210,8 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
     });
   };
 
-  const handleTrendingClick = (searchText: string) => {
-    setMessage(searchText);
-  };
-
-  const togglePrivateMode = () => {
-    setIsPrivateMode(!isPrivateMode);
-  };
+  const handleTrendingClick = (searchText: string) => setMessage(searchText);
+  const togglePrivateMode = () => setIsPrivateMode(!isPrivateMode);
 
   return (
     <>
@@ -146,13 +235,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
 
         <AnimatePresence>
           {showTooltip && !isOpen && (
-            <motion.div
-              className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-glass-panel border border-primary/30 rounded-lg shadow-lg"
-              initial={{ opacity: 0, scale: 0.8, y: 10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.8, y: 10 }}
-              transition={{ duration: 0.3 }}
-            >
+            <motion.div className="absolute bottom-full right-0 mb-2 w-64 p-3 bg-glass-panel border border-primary/30 rounded-lg shadow-lg" initial={{ opacity: 0, scale: 0.8, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.8, y: 10 }} transition={{ duration: 0.3 }}>
               <div className="text-sm text-foreground">Hello! I'm Mira, your marine research assistant. Ask me anything about ocean data! 🌊</div>
               <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-glass-panel border-r border-b border-primary/30" />
             </motion.div>
@@ -164,28 +247,29 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className={`fixed glass-panel z-[45] flex flex-col ${
-              isFullscreen ? 'inset-4 w-auto h-auto' : 'bottom-24 right-6 w-96 h-[600px]'
-            } ${isPrivateMode ? 'dark bg-slate-900/90 border-slate-700/50' : ''}`}
+            className={`fixed glass-panel z-[45] flex flex-col ${isFullscreen ? 'inset-4 w-auto h-auto' : 'bottom-24 right-6 w-96 h-[600px]'} ${isPrivateMode ? 'dark bg-slate-900/90 border-slate-700/50' : ''}`}
             initial={{ opacity: 0, scale: 0, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0, y: 50 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             {/* Header */}
-            <div className={`flex items-center justify-between p-4 border-b flex-shrink-0 ${
-              isPrivateMode ? 'border-slate-700/50 bg-slate-800/50' : 'border-glass-border/30'
-            }`}>
+            <div className={`flex items-center justify-between p-4 border-b flex-shrink-0 ${isPrivateMode ? 'border-slate-700/50 bg-slate-800/50' : 'border-glass-border/30'}`}>
               <div className="flex items-center space-x-2">
                 <img src={isPrivateMode ? mermaidPrivate : mermaidDefault} alt="Mira" className="h-8 w-auto object-contain" style={{ background: 'none' }} />
                 <div>
                   <h3 className={`font-semibold ${isPrivateMode ? 'text-white' : ''}`}>Mira - Marine AI Assistant</h3>
                   <p className={`text-xs ${isPrivateMode ? 'text-slate-400' : 'text-muted-foreground'}`}>
-                    {isLoading ? 'Thinking...' : isPrivateMode ? 'Private Mode' : 'Online'}
+                    {isLoadingHistory ? 'Loading history...' : isLoading ? 'Thinking...' : isPrivateMode ? 'Private Mode' : user ? 'Online • Saving' : 'Online • Guest'}
                   </p>
                 </div>
               </div>
               <div className="flex items-center space-x-2">
+                {user && !isPrivateMode && (
+                  <button onClick={startNewConversation} className={`p-1 rounded-lg transition-colors ${isPrivateMode ? 'hover:bg-slate-600/50 text-white' : 'hover:bg-glass-bg/30'}`} title="New conversation">
+                    <Plus className="w-4 h-4" />
+                  </button>
+                )}
                 <button onClick={togglePrivateMode} className={`p-1 rounded-lg transition-colors ${isPrivateMode ? 'bg-slate-700/50 hover:bg-slate-600/50 text-white' : 'hover:bg-glass-bg/30'}`} title={isPrivateMode ? "Exit private mode" : "Enter private mode"}>
                   <Glasses className="w-4 h-4" />
                 </button>
@@ -200,39 +284,37 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
 
             {/* Messages */}
             <div className={`flex-1 overflow-y-auto px-4 py-4 space-y-4 min-h-0 ${isPrivateMode ? 'bg-slate-800/30' : ''}`}>
-              {currentMessages.map((msg) => (
-                <motion.div
-                  key={msg.id}
-                  className={`flex items-start space-x-3 ${msg.isBot ? 'justify-start' : 'justify-end'}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  {msg.isBot && (
-                    <div className="flex items-center justify-center flex-shrink-0" style={{ background: 'none' }}>
-                      <img src={isPrivateMode ? mermaidPrivate : mermaidDefault} alt="Mira" className="h-8 w-auto object-contain" style={{ background: 'none' }} />
-                    </div>
-                  )}
-                  <div className={`max-w-[75%] p-3 rounded-lg ${
-                    msg.isBot
-                      ? isPrivateMode ? 'bg-slate-700/50 text-white' : 'bg-muted/50 text-foreground'
-                      : isPrivateMode ? 'bg-slate-600 text-white ml-auto' : 'bg-primary text-primary-foreground ml-auto'
-                  }`}>
-                    {msg.isBot ? (
-                      <div className="text-sm leading-relaxed prose prose-sm prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-                        <ReactMarkdown>{msg.text}</ReactMarkdown>
+              {isLoadingHistory ? (
+                <div className="flex items-center justify-center h-full">
+                  <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                </div>
+              ) : (
+                currentMessages.map((msg) => (
+                  <motion.div key={msg.id} className={`flex items-start space-x-3 ${msg.isBot ? 'justify-start' : 'justify-end'}`} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+                    {msg.isBot && (
+                      <div className="flex items-center justify-center flex-shrink-0" style={{ background: 'none' }}>
+                        <img src={isPrivateMode ? mermaidPrivate : mermaidDefault} alt="Mira" className="h-8 w-auto object-contain" style={{ background: 'none' }} />
                       </div>
-                    ) : (
-                      <p className="text-sm leading-relaxed">{msg.text}</p>
                     )}
-                  </div>
-                  {!msg.isBot && (
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isPrivateMode ? 'bg-slate-600' : 'bg-primary'}`}>
-                      <span className={`text-sm ${isPrivateMode ? 'text-white' : 'text-primary-foreground'}`}>U</span>
+                    <div className={`max-w-[75%] p-3 rounded-lg ${msg.isBot ? isPrivateMode ? 'bg-slate-700/50 text-white' : 'bg-muted/50 text-foreground' : isPrivateMode ? 'bg-slate-600 text-white ml-auto' : 'bg-primary text-primary-foreground ml-auto'}`}>
+                      {msg.isBot ? (
+                        <div className="text-sm leading-relaxed prose prose-sm prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                          <ReactMarkdown>{msg.text}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        <p className="text-sm leading-relaxed">{msg.text}</p>
+                      )}
                     </div>
-                  )}
-                </motion.div>
-              ))}
+                    {!msg.isBot && (
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${isPrivateMode ? 'bg-slate-600' : 'bg-primary'}`}>
+                        <span className={`text-sm ${isPrivateMode ? 'text-white' : 'text-primary-foreground'}`}>
+                          {user?.email?.[0]?.toUpperCase() || 'U'}
+                        </span>
+                      </div>
+                    )}
+                  </motion.div>
+                ))
+              )}
               {isLoading && !currentMessages[currentMessages.length - 1]?.isBot && (
                 <motion.div className="flex items-start space-x-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                   <div className="flex items-center justify-center flex-shrink-0" style={{ background: 'none' }}>
@@ -251,45 +333,15 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
               <div className="mb-4">
                 <div className="flex flex-wrap gap-2">
                   {trendingSearches.map((search, index) => (
-                    <motion.button
-                      key={index}
-                      onClick={() => handleTrendingClick(search)}
-                      className={`px-3 py-1 text-xs rounded-full transition-all duration-200 text-left ${
-                        isPrivateMode
-                          ? 'bg-slate-700/50 border border-slate-600/50 text-slate-300 hover:bg-slate-600/50 hover:border-slate-500/50'
-                          : 'bg-muted/30 border border-border/30 hover:bg-primary/10 hover:border-primary/30'
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
+                    <motion.button key={index} onClick={() => handleTrendingClick(search)} className={`px-3 py-1 text-xs rounded-full transition-all duration-200 text-left ${isPrivateMode ? 'bg-slate-700/50 border border-slate-600/50 text-slate-300 hover:bg-slate-600/50 hover:border-slate-500/50' : 'bg-muted/30 border border-border/30 hover:bg-primary/10 hover:border-primary/30'}`} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                       {search.length > 50 ? search.substring(0, 50) + '...' : search}
                     </motion.button>
                   ))}
                 </div>
               </div>
               <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()}
-                  placeholder={isPrivateMode ? "Ask privately about marine data..." : "Ask about marine data..."}
-                  className={`flex-1 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 ${
-                    isPrivateMode
-                      ? 'bg-slate-700/50 border border-slate-600/50 text-white placeholder-slate-400'
-                      : 'bg-muted/30 border border-border/30'
-                  }`}
-                  disabled={isLoading}
-                />
-                <button
-                  onClick={handleSendMessage}
-                  className={`px-4 py-3 rounded-lg transition-colors disabled:opacity-50 ${
-                    isPrivateMode
-                      ? 'bg-slate-600 text-white hover:bg-slate-500'
-                      : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                  }`}
-                  disabled={!message.trim() || isLoading}
-                >
+                <input type="text" value={message} onChange={(e) => setMessage(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSendMessage()} placeholder={isPrivateMode ? "Ask privately about marine data..." : "Ask about marine data..."} className={`flex-1 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 ${isPrivateMode ? 'bg-slate-700/50 border border-slate-600/50 text-white placeholder-slate-400' : 'bg-muted/30 border border-border/30'}`} disabled={isLoading} />
+                <button onClick={handleSendMessage} className={`px-4 py-3 rounded-lg transition-colors disabled:opacity-50 ${isPrivateMode ? 'bg-slate-600 text-white hover:bg-slate-500' : 'bg-primary text-primary-foreground hover:bg-primary/90'}`} disabled={!message.trim() || isLoading}>
                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                 </button>
               </div>
