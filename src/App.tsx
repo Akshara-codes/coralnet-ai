@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
@@ -15,7 +16,6 @@ import OceanBackground from "./components/OceanBackground";
 import Navbar from "./components/Navbar";
 import ChatbotOctopus from "./components/ChatbotOctopus";
 
-// Create a global function to open chatbot
 declare global {
   interface Window {
     openChatbot: () => void;
@@ -35,22 +35,23 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <OceanBackground />
-        <Navbar />
-        <div className="pt-20">
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/visualization" element={<Visualization />} />
-            <Route path="/modules" element={<Modules />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-        <ChatbotOctopus />
+        <AuthProvider>
+          <OceanBackground />
+          <Navbar />
+          <div className="pt-20">
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/visualization" element={<Visualization />} />
+              <Route path="/modules" element={<Modules />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </div>
+          <ChatbotOctopus />
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
