@@ -12,6 +12,7 @@ const Navbar = () => {
 
   const navItems = [
     { name: 'Home', path: '/', icon: Waves },
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Visualization', path: '/visualization', icon: BarChart3 },
     { name: 'Modules', path: '/modules', icon: Microscope },
     { name: 'About', path: '/about', icon: Users },
