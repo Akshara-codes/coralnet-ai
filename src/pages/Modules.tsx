@@ -6,6 +6,8 @@ import { Microscope, Fish, Dna, TreePine, ArrowRight, Search, Upload, BarChart3 
 import { useNavigate } from 'react-router-dom';
 
 const Modules = () => {
+  const navigate = useNavigate();
+
   const modules = [
     {
       id: 'taxonomy',
