@@ -54,6 +54,7 @@ const App = () => (
               <Route path="/visualization" element={<Visualization />} />
               <Route path="/modules" element={<Modules />} />
               <Route path="/modules/taxonomy" element={<TaxonomyExplorer />} />
+              <Route path="/modules/otolith" element={<OtolithMorphology />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
