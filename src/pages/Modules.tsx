@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Microscope, Fish, Dna, TreePine, ArrowRight, Search, Upload, BarChart3 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Modules = () => {
   const modules = [
