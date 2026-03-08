@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.edna]
 verify_jwt = false
+
+[functions.biodiversity]
+verify_jwt = false

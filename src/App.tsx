@@ -17,6 +17,7 @@ import Visualization from "./pages/Visualization";
 import TaxonomyExplorer from "./pages/TaxonomyExplorer";
 import OtolithMorphology from "./pages/OtolithMorphology";
 import EnvironmentalDNA from "./pages/EnvironmentalDNA";
+import BiodiversityAssessment from "./pages/BiodiversityAssessment";
 import OceanBackground from "./components/OceanBackground";
 import Navbar from "./components/Navbar";
 import ChatbotOctopus from "./components/ChatbotOctopus";
@@ -57,6 +58,7 @@ const App = () => (
               <Route path="/modules/taxonomy" element={<TaxonomyExplorer />} />
               <Route path="/modules/otolith" element={<OtolithMorphology />} />
               <Route path="/modules/edna" element={<EnvironmentalDNA />} />
+              <Route path="/modules/biodiversity" element={<BiodiversityAssessment />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
