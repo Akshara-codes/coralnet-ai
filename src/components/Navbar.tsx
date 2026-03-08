@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Waves, BarChart3, Microscope, Users, Phone, LogOut } from 'lucide-react';
+import { Waves, BarChart3, Microscope, Users, Phone, LogOut, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
