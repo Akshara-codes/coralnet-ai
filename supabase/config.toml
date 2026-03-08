@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions.taxonomy]
 verify_jwt = false
+
+[functions.otolith]
+verify_jwt = false
