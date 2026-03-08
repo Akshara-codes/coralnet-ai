@@ -72,6 +72,15 @@ const BiodiversityAssessment = () => {
       onDone: () => {
         setChatHistory(prev => [...prev, { role: 'assistant', content: botText }]);
         setLoading(false);
+        // Save analysis result
+        import('@/lib/analysisService').then(({ saveAnalysisResult }) => {
+          saveAnalysisResult({
+            module: 'biodiversity',
+            queryText: userText,
+            responsePreview: botText,
+            summary: `Biodiversity query: ${userText.slice(0, 100)}`,
+          });
+        });
       },
       onError: (error) => {
         setMessages(prev =>

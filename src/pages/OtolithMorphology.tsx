@@ -160,6 +160,15 @@ const OtolithMorphology = () => {
         setChatHistory(prev => [...prev, { role: 'assistant', content: accumulated }]);
         setIsLoading(false);
         scrollToBottom();
+        // Save analysis result
+        import('@/lib/analysisService').then(({ saveAnalysisResult }) => {
+          saveAnalysisResult({
+            module: 'otolith',
+            queryText: displayText,
+            responsePreview: accumulated,
+            summary: `Otolith query: ${displayText.slice(0, 100)}`,
+          });
+        });
       },
       onError: (error) => {
         setMessages(prev =>
