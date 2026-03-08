@@ -13,6 +13,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Modules from "./pages/Modules";
+import Dashboard from "./pages/Dashboard";
 import Visualization from "./pages/Visualization";
 import TaxonomyExplorer from "./pages/TaxonomyExplorer";
 import OtolithMorphology from "./pages/OtolithMorphology";
