@@ -15,7 +15,9 @@ const Modules = () => {
       description: 'Comprehensive species identification and classification system with AI-powered assistance',
       icon: TreePine,
       features: ['Hierarchical species tree', 'AI-assisted identification', 'Visual morphology comparison', 'Expert validation system'],
-      color: 'from-primary/20 to-primary/5'
+      color: 'from-primary/20 to-primary/5',
+      route: '/modules/taxonomy',
+      ready: true,
     },
     {
       id: 'otolith',
