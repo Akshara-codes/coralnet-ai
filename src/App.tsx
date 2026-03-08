@@ -52,6 +52,7 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/visualization" element={<Visualization />} />
               <Route path="/modules" element={<Modules />} />
+              <Route path="/modules/taxonomy" element={<TaxonomyExplorer />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

@@ -2,3 +2,6 @@ project_id = "tvlsidudspmnkxaesrhu"
 
 [functions.chat]
 verify_jwt = false
+
+[functions.taxonomy]
+verify_jwt = false
