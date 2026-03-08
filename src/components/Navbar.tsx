@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Waves, BarChart3, Microscope, Users, Phone, LogOut } from 'lucide-react';
+import { Waves, BarChart3, Microscope, Users, Phone, LogOut, LayoutDashboard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
@@ -12,6 +12,7 @@ const Navbar = () => {
 
   const navItems = [
     { name: 'Home', path: '/', icon: Waves },
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Visualization', path: '/visualization', icon: BarChart3 },
     { name: 'Modules', path: '/modules', icon: Microscope },
     { name: 'About', path: '/about', icon: Users },

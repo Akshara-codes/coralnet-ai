@@ -13,6 +13,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import Modules from "./pages/Modules";
+import Dashboard from "./pages/Dashboard";
 import Visualization from "./pages/Visualization";
 import TaxonomyExplorer from "./pages/TaxonomyExplorer";
 import OtolithMorphology from "./pages/OtolithMorphology";
@@ -55,6 +56,7 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/visualization" element={<Visualization />} />
               <Route path="/modules" element={<Modules />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/modules/taxonomy" element={<TaxonomyExplorer />} />
               <Route path="/modules/otolith" element={<OtolithMorphology />} />
               <Route path="/modules/edna" element={<EnvironmentalDNA />} />
