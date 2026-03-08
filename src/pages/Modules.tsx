@@ -47,7 +47,7 @@ const Modules = () => {
       features: ['Species diversity indices', 'Ecosystem health scoring', 'Population trend analysis', 'Conservation status tracking'],
       color: 'from-primary-glow/20 to-primary-glow/5',
       route: '/modules/biodiversity',
-      ready: false,
+      ready: true,
     }
   ];
 
