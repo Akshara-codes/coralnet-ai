@@ -37,7 +37,7 @@ const Modules = () => {
       features: ['Sequence upload & matching', 'Species identification', 'Confidence scoring', 'Phylogenetic analysis'],
       color: 'from-accent/20 to-accent/5',
       route: '/modules/edna',
-      ready: false,
+      ready: true,
     },
     {
       id: 'biodiversity',

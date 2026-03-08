@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.otolith]
 verify_jwt = false
+
+[functions.edna]
+verify_jwt = false

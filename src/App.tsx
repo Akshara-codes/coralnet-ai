@@ -56,6 +56,7 @@ const App = () => (
               <Route path="/modules" element={<Modules />} />
               <Route path="/modules/taxonomy" element={<TaxonomyExplorer />} />
               <Route path="/modules/otolith" element={<OtolithMorphology />} />
+              <Route path="/modules/edna" element={<EnvironmentalDNA />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
