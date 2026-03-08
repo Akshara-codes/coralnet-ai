@@ -103,9 +103,14 @@ const Modules = () => {
                       </div>
                     ))}
                   </div>
-                  <Button className="w-full group-hover:bg-primary/20 transition-colors">
-                    Launch Module
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <Button 
+                    className="w-full group-hover:bg-primary/20 transition-colors"
+                    onClick={() => module.ready ? navigate(module.route) : null}
+                    variant={module.ready ? "default" : "outline"}
+                    disabled={!module.ready}
+                  >
+                    {module.ready ? 'Launch Module' : 'Coming Soon'}
+                    {module.ready && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />}
                   </Button>
                 </CardContent>
               </Card>
