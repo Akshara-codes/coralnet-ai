@@ -25,7 +25,9 @@ const Modules = () => {
       description: 'Advanced otolith shape analysis and morphometric measurements for fish age determination',
       icon: Microscope,
       features: ['Image upload & processing', 'Automated shape analysis', 'Morphometric measurements', 'Age estimation models'],
-      color: 'from-secondary/20 to-secondary/5'
+      color: 'from-secondary/20 to-secondary/5',
+      route: '/modules/otolith',
+      ready: false,
     },
     {
       id: 'edna',
