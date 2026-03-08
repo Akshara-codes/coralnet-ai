@@ -27,7 +27,7 @@ const Modules = () => {
       features: ['Image upload & processing', 'Automated shape analysis', 'Morphometric measurements', 'Age estimation models'],
       color: 'from-secondary/20 to-secondary/5',
       route: '/modules/otolith',
-      ready: false,
+      ready: true,
     },
     {
       id: 'edna',
