@@ -130,7 +130,7 @@ const Dashboard = () => {
                       <div className={`p-2.5 rounded-lg ${mod.bg}`}>
                         <mod.icon className={`w-5 h-5 ${mod.color}`} />
                       </div>
-                      <span className="text-xs font-medium text-green-400 flex items-center gap-1">
+                      <span className="text-xs font-medium text-primary flex items-center gap-1">
                         <TrendingUp className="w-3 h-3" />
                         {mod.trend}
                       </span>

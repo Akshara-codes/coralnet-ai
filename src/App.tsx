@@ -56,6 +56,7 @@ const App = () => (
               <Route path="/contact" element={<Contact />} />
               <Route path="/visualization" element={<Visualization />} />
               <Route path="/modules" element={<Modules />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/modules/taxonomy" element={<TaxonomyExplorer />} />
               <Route path="/modules/otolith" element={<OtolithMorphology />} />
               <Route path="/modules/edna" element={<EnvironmentalDNA />} />
