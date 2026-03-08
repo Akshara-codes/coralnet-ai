@@ -3,8 +3,11 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Microscope, Fish, Dna, TreePine, ArrowRight, Search, Upload, BarChart3 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Modules = () => {
+  const navigate = useNavigate();
+
   const modules = [
     {
       id: 'taxonomy',
@@ -12,7 +15,9 @@ const Modules = () => {
       description: 'Comprehensive species identification and classification system with AI-powered assistance',
       icon: TreePine,
       features: ['Hierarchical species tree', 'AI-assisted identification', 'Visual morphology comparison', 'Expert validation system'],
-      color: 'from-primary/20 to-primary/5'
+      color: 'from-primary/20 to-primary/5',
+      route: '/modules/taxonomy',
+      ready: true,
     },
     {
       id: 'otolith',
@@ -20,7 +25,9 @@ const Modules = () => {
       description: 'Advanced otolith shape analysis and morphometric measurements for fish age determination',
       icon: Microscope,
       features: ['Image upload & processing', 'Automated shape analysis', 'Morphometric measurements', 'Age estimation models'],
-      color: 'from-secondary/20 to-secondary/5'
+      color: 'from-secondary/20 to-secondary/5',
+      route: '/modules/otolith',
+      ready: false,
     },
     {
       id: 'edna',
@@ -28,7 +35,9 @@ const Modules = () => {
       description: 'Molecular sequencing analysis for biodiversity assessment and species detection',
       icon: Dna,
       features: ['Sequence upload & matching', 'Species identification', 'Confidence scoring', 'Phylogenetic analysis'],
-      color: 'from-accent/20 to-accent/5'
+      color: 'from-accent/20 to-accent/5',
+      route: '/modules/edna',
+      ready: false,
     },
     {
       id: 'biodiversity',
@@ -36,7 +45,9 @@ const Modules = () => {
       description: 'Comprehensive ecosystem health metrics and biodiversity index calculations',
       icon: Fish,
       features: ['Species diversity indices', 'Ecosystem health scoring', 'Population trend analysis', 'Conservation status tracking'],
-      color: 'from-primary-glow/20 to-primary-glow/5'
+      color: 'from-primary-glow/20 to-primary-glow/5',
+      route: '/modules/biodiversity',
+      ready: false,
     }
   ];
 
@@ -92,9 +103,14 @@ const Modules = () => {
                       </div>
                     ))}
                   </div>
-                  <Button className="w-full group-hover:bg-primary/20 transition-colors">
-                    Launch Module
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  <Button 
+                    className="w-full group-hover:bg-primary/20 transition-colors"
+                    onClick={() => module.ready ? navigate(module.route) : null}
+                    variant={module.ready ? "default" : "outline"}
+                    disabled={!module.ready}
+                  >
+                    {module.ready ? 'Launch Module' : 'Coming Soon'}
+                    {module.ready && <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />}
                   </Button>
                 </CardContent>
               </Card>
