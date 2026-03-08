@@ -16,6 +16,7 @@ import Modules from "./pages/Modules";
 import Visualization from "./pages/Visualization";
 import TaxonomyExplorer from "./pages/TaxonomyExplorer";
 import OtolithMorphology from "./pages/OtolithMorphology";
+import EnvironmentalDNA from "./pages/EnvironmentalDNA";
 import OceanBackground from "./components/OceanBackground";
 import Navbar from "./components/Navbar";
 import ChatbotOctopus from "./components/ChatbotOctopus";
