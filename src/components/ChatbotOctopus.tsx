@@ -225,7 +225,7 @@ const ChatbotOctopus = ({ forceOpen = false }) => {
           animate={{ y: [0, -10, 0] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          <img src={isPrivateMode ? mermaidPrivate : mermaidDefault} alt="Mira" className="h-10 w-auto object-contain" style={{ background: 'none' }} />
+          <img src={isPrivateMode ? mermaidPrivate : mermaidDefault} alt="Mira" className="h-12 w-12 rounded-full object-cover" />
           <div className="absolute -top-1 -right-1 w-2 h-6 bg-primary/30 rounded-full origin-bottom animate-pulse" style={{ transform: 'rotate(15deg)' }} />
           <div className="absolute -top-2 -left-1 w-2 h-5 bg-primary/30 rounded-full origin-bottom animate-pulse" style={{ transform: 'rotate(-20deg)', animationDelay: '0.5s' }} />
           <div className="absolute -bottom-1 -right-2 w-2 h-4 bg-primary/30 rounded-full origin-top animate-pulse" style={{ transform: 'rotate(45deg)', animationDelay: '1s' }} />
