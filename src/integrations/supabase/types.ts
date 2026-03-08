@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      analysis_results: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          module: string
+          query_text: string
+          response_preview: string | null
+          summary: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          module: string
+          query_text: string
+          response_preview?: string | null
+          summary: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          module?: string
+          query_text?: string
+          response_preview?: string | null
+          summary?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           content: string
@@ -75,7 +108,15 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      module_stats: {
+        Row: {
+          last_analysis: string | null
+          module: string | null
+          total_analyses: number | null
+          unique_users: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       [_ in never]: never

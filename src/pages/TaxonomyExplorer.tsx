@@ -67,6 +67,15 @@ const TaxonomyExplorer = () => {
         setChatHistory(prev => [...prev, { role: 'assistant', content: accumulated }]);
         setIsLoading(false);
         scrollToBottom();
+        // Save analysis result
+        import('@/lib/analysisService').then(({ saveAnalysisResult }) => {
+          saveAnalysisResult({
+            module: 'taxonomy',
+            queryText: query,
+            responsePreview: accumulated,
+            summary: `Taxonomy query: ${query.slice(0, 100)}`,
+          });
+        });
       },
       onError: (error) => {
         setMessages(prev =>
