@@ -14,6 +14,7 @@ import SpeciesCompositionChart from '@/components/SpeciesCompositionChart';
 import TemporalPatternsChart from '@/components/TemporalPatternsChart';
 import CorrelationMatrix from '@/components/CorrelationMatrix';
 import VisualizationPanel from '@/components/VisualizationPanel';
+import DataUploadPanel from '@/components/DataUploadPanel';
 
 const visualizationTypes = [
   {
@@ -81,10 +82,11 @@ const Visualization = () => {
         </motion.div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-          <TabsList className="grid w-full grid-cols-3 lg:w-[400px] mx-auto">
+          <TabsList className="grid w-full grid-cols-4 lg:w-[520px] mx-auto">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="visualizations">Visualizations</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="your-data">Your Data</TabsTrigger>
           </TabsList>
 
           {/* Dashboard Tab */}
@@ -238,6 +240,13 @@ const Visualization = () => {
                 <CardContent><CorrelationMatrix /></CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          {/* Your Data Tab */}
+          <TabsContent value="your-data">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <DataUploadPanel />
+            </motion.div>
           </TabsContent>
         </Tabs>
       </div>
