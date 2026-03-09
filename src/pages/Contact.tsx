@@ -21,38 +21,6 @@ const Contact = () => {
     setSending(false);
   };
 
-  const contactInfo = [
-    {
-      icon: MapPin,
-      title: 'Research Center',
-      details: [
-        'Centre for Marine Living Resources & Ecology',
-        'Ministry of Earth Sciences, Government of India',
-        'Kochi, Kerala 682 508, India'
-      ]
-    },
-    {
-      icon: Mail,
-      title: 'Email Contact',
-      details: [CONTACT_EMAIL]
-    },
-    {
-      icon: Phone,
-      title: 'Phone Support',
-      details: [
-        '+91-484-2390814 (Main Office)',
-        '+91-484-2390815 (Technical Support)'
-      ]
-    },
-    {
-      icon: Clock,
-      title: 'Operating Hours',
-      details: [
-        'Monday - Friday: 9:00 AM - 6:00 PM IST',
-        'Saturday: 9:00 AM - 1:00 PM IST'
-      ]
-    }
-  ];
 
   return (
     <div className="min-h-screen pt-32 pb-20 px-6">
