@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { streamTaxonomy } from '@/lib/taxonomyService';
 import type { ChatMessage } from '@/lib/chatService';
+import { exportChatToPdf } from '@/lib/pdfExport';
 
 type DisplayMessage = {
   id: number;
