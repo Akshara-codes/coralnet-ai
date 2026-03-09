@@ -8,6 +8,7 @@ import { streamOtolith, type OtolithMessage } from '@/lib/otolithService';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { exportChatToPdf } from '@/lib/pdfExport';
 
 type DisplayMessage = {
   id: number;
