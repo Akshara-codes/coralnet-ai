@@ -115,9 +115,14 @@ const TaxonomyExplorer = () => {
                 <p className="text-sm text-muted-foreground">AI-powered species identification & classification</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={handleClear}>
-              <Trash2 className="w-4 h-4 mr-1" /> Clear
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={() => exportChatToPdf({ title: 'Taxonomy Explorer', messages: messages.map(m => ({ text: m.text, isBot: m.isBot })) })} disabled={messages.length <= 1}>
+                <Download className="w-4 h-4 mr-1" /> Export PDF
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleClear}>
+                <Trash2 className="w-4 h-4 mr-1" /> Clear
+              </Button>
+            </div>
           </div>
         </motion.div>
 
