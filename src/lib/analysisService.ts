@@ -18,14 +18,14 @@ export async function saveAnalysisResult({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const { error } = await supabase.from('analysis_results' as any).insert({
+  const { error } = await supabase.from('analysis_results').insert([{
     user_id: user.id,
     module,
     query_text: queryText,
     response_preview: responsePreview.slice(0, 500),
     summary,
-    metadata,
-  });
+    metadata: metadata as any,
+  }]);
 
   if (error) {
     console.error('Failed to save analysis result:', error);
@@ -34,7 +34,7 @@ export async function saveAnalysisResult({
 
 export async function getModuleStats() {
   const { data, error } = await supabase
-    .from('analysis_results' as any)
+    .from('analysis_results')
     .select('module')
     .then(({ data, error }) => {
       if (error) return { data: null, error };
@@ -50,7 +50,7 @@ export async function getModuleStats() {
 
 export async function getUserRecentActivity(limit = 10) {
   const { data, error } = await supabase
-    .from('analysis_results' as any)
+    .from('analysis_results')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(limit);
