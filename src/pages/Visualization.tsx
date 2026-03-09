@@ -14,6 +14,7 @@ import SpeciesCompositionChart from '@/components/SpeciesCompositionChart';
 import TemporalPatternsChart from '@/components/TemporalPatternsChart';
 import CorrelationMatrix from '@/components/CorrelationMatrix';
 import VisualizationPanel from '@/components/VisualizationPanel';
+import DataUploadPanel from '@/components/DataUploadPanel';
 
 const visualizationTypes = [
   {
