@@ -50,7 +50,7 @@ export async function getModuleStats() {
 
 export async function getUserRecentActivity(limit = 10) {
   const { data, error } = await supabase
-    .from('analysis_results' as any)
+    .from('analysis_results')
     .select('*')
     .order('created_at', { ascending: false })
     .limit(limit);
