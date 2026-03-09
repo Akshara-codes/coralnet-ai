@@ -150,38 +150,6 @@ const About = () => {
         </motion.div>
 
 
-        {/* Partnerships */}
-        <motion.div
-          className="glass-panel p-8 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-        >
-          <h2 className="text-3xl font-bold mb-6 text-gradient-aqua">
-            Institutional Partnerships
-          </h2>
-          <p className="text-muted-foreground mb-8 leading-relaxed">
-            Our platform is developed in collaboration with leading marine research institutions across India, fostering innovation and knowledge sharing in marine science.
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 text-primary">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              <span className="font-medium">Centre for Marine Living Resources & Ecology (CMLRE)</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
-              <span className="font-medium">Ministry of Earth Sciences (MoES)</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              <span className="font-medium">CSIR - National Institute of Oceanography</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-secondary rounded-full animate-pulse" />
-              <span className="font-medium">Indian National Centre for Ocean Information Services</span>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </div>
   );
