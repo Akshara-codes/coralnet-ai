@@ -15,8 +15,12 @@ export async function saveAnalysisResult({
   summary: string;
   metadata?: Record<string, unknown>;
 }) {
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
+  if (!user) {
+    console.warn('Skipping analysis save: no authenticated session');
+    return null;
+  }
 
   const { error } = await supabase.from('analysis_results').insert([{
     user_id: user.id,
