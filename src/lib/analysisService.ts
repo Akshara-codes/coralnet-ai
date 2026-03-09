@@ -18,7 +18,7 @@ export async function saveAnalysisResult({
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const { error } = await supabase.from('analysis_results' as any).insert({
+  const { error } = await supabase.from('analysis_results').insert({
     user_id: user.id,
     module,
     query_text: queryText,
