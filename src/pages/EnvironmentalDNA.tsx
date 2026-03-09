@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { streamEdna } from '@/lib/ednaService';
 import { ChatMessage } from '@/lib/chatService';
+import { exportChatToPdf } from '@/lib/pdfExport';
 
 type DisplayMessage = { id: number; text: string; isBot: boolean };
 
