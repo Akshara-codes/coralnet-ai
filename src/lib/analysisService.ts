@@ -34,7 +34,7 @@ export async function saveAnalysisResult({
 
 export async function getModuleStats() {
   const { data, error } = await supabase
-    .from('analysis_results' as any)
+    .from('analysis_results')
     .select('module')
     .then(({ data, error }) => {
       if (error) return { data: null, error };
