@@ -24,7 +24,7 @@ export async function saveAnalysisResult({
     query_text: queryText,
     response_preview: responsePreview.slice(0, 500),
     summary,
-    metadata,
+    metadata: metadata as any,
   }]);
 
   if (error) {
