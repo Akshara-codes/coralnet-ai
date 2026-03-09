@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Clock, Globe } from 'lucide-react';
+import { Send, Globe, MapPin, Mail, Phone, Clock } from 'lucide-react';
+import { toast } from 'sonner';
+
+const CONTACT_EMAIL = 'akshara.studyjams@gmail.com';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
+  const [message, setMessage] = useState('');
+  const [sending, setSending] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Contact form submission:', formData);
-    // Handle form submission logic
+    if (!message.trim()) return;
+
+    setSending(true);
+    const subject = encodeURIComponent('Message from Marine Biodiversity Platform');
+    const body = encodeURIComponent(message);
+    window.open(`mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`, '_blank');
+    toast.success('Email client opened! Send your message from there.');
+    setSending(false);
   };
 
   const contactInfo = [
@@ -29,19 +34,14 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email Contact',
-      details: [
-        'research@cmlre.gov.in',
-        'platform-support@marinebio.ai',
-        'partnerships@marinebio.ai'
-      ]
+      details: [CONTACT_EMAIL]
     },
     {
       icon: Phone,
       title: 'Phone Support',
       details: [
         '+91-484-2390814 (Main Office)',
-        '+91-484-2390815 (Technical Support)',
-        '+91-484-2390816 (Collaborations)'
+        '+91-484-2390815 (Technical Support)'
       ]
     },
     {
@@ -49,8 +49,7 @@ const Contact = () => {
       title: 'Operating Hours',
       details: [
         'Monday - Friday: 9:00 AM - 6:00 PM IST',
-        'Saturday: 9:00 AM - 1:00 PM IST',
-        'Emergency Support: 24/7 Available'
+        'Saturday: 9:00 AM - 1:00 PM IST'
       ]
     }
   ];
@@ -73,163 +72,32 @@ const Contact = () => {
           </p>
         </motion.div>
 
-        {/* API Documentation Section */}
-        <motion.div
-          className="mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <div className="glass-panel p-8">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="p-3 rounded-lg bg-primary/20 text-primary">
-                <Globe className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 className="text-2xl font-bold text-gradient-aqua">
-                  API Documentation
-                </h2>
-                <p className="text-muted-foreground">
-                  Complete developer resources for platform integration
-                </p>
-              </div>
-            </div>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="glass-panel p-6 hover:bg-glass-bg/30 transition-all duration-300">
-                <h3 className="text-lg font-semibold mb-3 text-foreground">REST API</h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  Access marine biodiversity data through our comprehensive REST endpoints
-                </p>
-                <motion.button
-                  className="w-full bg-primary/20 text-primary py-2 px-4 rounded-lg hover:bg-primary/30 transition-all duration-300"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  View REST Docs
-                </motion.button>
-              </div>
-              
-              <div className="glass-panel p-6 hover:bg-glass-bg/30 transition-all duration-300">
-                <h3 className="text-lg font-semibold mb-3 text-foreground">GraphQL API</h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  Query complex marine data relationships with flexible GraphQL interface
-                </p>
-                <motion.button
-                  className="w-full bg-secondary/20 text-secondary py-2 px-4 rounded-lg hover:bg-secondary/30 transition-all duration-300"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Explore GraphQL
-                </motion.button>
-              </div>
-              
-              <div className="glass-panel p-6 hover:bg-glass-bg/30 transition-all duration-300">
-                <h3 className="text-lg font-semibold mb-3 text-foreground">SDK & Libraries</h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  Python, R, and JavaScript libraries for seamless integration
-                </p>
-                <motion.button
-                  className="w-full bg-accent/20 text-accent py-2 px-4 rounded-lg hover:bg-accent/30 transition-all duration-300"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  Download SDKs
-                </motion.button>
-              </div>
-            </div>
-            
-            <div className="mt-6 p-4 bg-primary/10 rounded-lg border border-primary/20">
-              <div className="flex items-start space-x-3">
-                <div className="p-1 rounded bg-primary/20">
-                  <Globe className="w-4 h-4 text-primary" />
-                </div>
-                <div>
-                  <h4 className="font-medium text-foreground mb-1">API Access Keys</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Contact our team to obtain API credentials and access tokens for platform integration.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
         <div className="grid lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
+          {/* Send Us a Message */}
           <motion.div
             className="glass-panel p-8"
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <h2 className="text-2xl font-bold mb-6 text-gradient-aqua">
+            <h2 className="text-2xl font-bold mb-2 text-gradient-aqua">
               Send Us a Message
             </h2>
-            
+            <p className="text-muted-foreground text-sm mb-6">
+              Your message will be sent to <span className="text-primary">{CONTACT_EMAIL}</span>
+            </p>
+
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2 text-foreground">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-4 py-3 bg-glass-bg/30 border border-glass-border/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 aqua-glow"
-                  placeholder="Dr. Priya Sharma"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2 text-foreground">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                  className="w-full px-4 py-3 bg-glass-bg/30 border border-glass-border/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 aqua-glow"
-                  placeholder="priya.sharma@institution.edu"
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium mb-2 text-foreground">
-                  Subject
-                </label>
-                <select
-                  id="subject"
-                  value={formData.subject}
-                  onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
-                  className="w-full px-4 py-3 bg-glass-bg/30 border border-glass-border/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 aqua-glow"
-                  required
-                >
-                  <option value="">Select inquiry type</option>
-                  <option value="research-collaboration">Research Collaboration</option>
-                  <option value="technical-support">Technical Support</option>
-                  <option value="data-access">Data Access Request</option>
-                  <option value="platform-features">Platform Features</option>
-                  <option value="training">Training & Workshops</option>
-                  <option value="partnerships">Institutional Partnerships</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-
               <div>
                 <label htmlFor="message" className="block text-sm font-medium mb-2 text-foreground">
                   Message
                 </label>
                 <textarea
                   id="message"
-                  rows={6}
-                  value={formData.message}
-                  onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
-                  className="w-full px-4 py-3 bg-glass-bg/30 border border-glass-border/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 aqua-glow resize-none"
+                  rows={8}
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  className="w-full px-4 py-3 bg-glass-bg/30 border border-glass-border/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 aqua-glow resize-none text-foreground"
                   placeholder="Tell us about your research interests, collaboration ideas, or technical questions..."
                   required
                 />
@@ -237,7 +105,8 @@ const Contact = () => {
 
               <motion.button
                 type="submit"
-                className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-semibold hover:bg-primary-glow transition-all duration-300 aqua-glow flex items-center justify-center space-x-2"
+                disabled={sending || !message.trim()}
+                className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-semibold hover:bg-primary-glow transition-all duration-300 aqua-glow flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
@@ -256,7 +125,6 @@ const Contact = () => {
           >
             {contactInfo.map((info, index) => {
               const Icon = info.icon;
-              
               return (
                 <motion.div
                   key={info.title}
@@ -287,7 +155,7 @@ const Contact = () => {
               );
             })}
 
-            {/* Location Map Placeholder */}
+            {/* Location */}
             <motion.div
               className="glass-panel p-6"
               initial={{ opacity: 0, y: 20 }}
@@ -302,53 +170,15 @@ const Contact = () => {
                   Research Center Location
                 </h3>
               </div>
-              
-              <div className="bg-glass-bg/20 rounded-lg h-48 flex items-center justify-center border border-glass-border/30">
+              <div className="bg-glass-bg/20 rounded-lg h-36 flex items-center justify-center border border-glass-border/30">
                 <div className="text-center">
                   <MapPin className="w-8 h-8 text-primary mx-auto mb-2" />
-                  <p className="text-muted-foreground text-sm">
-                    Interactive map integration available
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    CMLRE Campus, Kochi, Kerala
-                  </p>
+                  <p className="text-muted-foreground text-sm">CMLRE Campus, Kochi, Kerala</p>
                 </div>
-              </div>
-              
-              <div className="mt-4 text-xs text-muted-foreground">
-                <p>🚗 30 minutes from Cochin International Airport</p>
-                <p>🚢 15 minutes from Kochi Port</p>
-                <p>🚇 Metro connectivity to major city areas</p>
               </div>
             </motion.div>
           </motion.div>
         </div>
-
-        {/* Quick Links Footer */}
-        <motion.div
-          className="mt-16 glass-panel p-8 text-center"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.2 }}
-        >
-          <h2 className="text-2xl font-bold mb-4 text-gradient-aqua">
-            Explore More Resources
-          </h2>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <a href="/docs" className="text-primary hover:text-primary-glow transition-colors px-4 py-2 rounded-lg hover:bg-primary/10">
-              API Documentation
-            </a>
-            <a href="/tutorials" className="text-primary hover:text-primary-glow transition-colors px-4 py-2 rounded-lg hover:bg-primary/10">
-              Platform Tutorials
-            </a>
-            <a href="/research" className="text-primary hover:text-primary-glow transition-colors px-4 py-2 rounded-lg hover:bg-primary/10">
-              Research Publications
-            </a>
-            <a href="/partnerships" className="text-primary hover:text-primary-glow transition-colors px-4 py-2 rounded-lg hover:bg-primary/10">
-              Partnership Opportunities
-            </a>
-          </div>
-        </motion.div>
       </div>
     </div>
   );
