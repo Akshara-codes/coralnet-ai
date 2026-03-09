@@ -241,6 +241,13 @@ const Visualization = () => {
               </Card>
             </div>
           </TabsContent>
+
+          {/* Your Data Tab */}
+          <TabsContent value="your-data">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <DataUploadPanel />
+            </motion.div>
+          </TabsContent>
         </Tabs>
       </div>
     </div>
