@@ -82,10 +82,11 @@ const Visualization = () => {
         </motion.div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
-          <TabsList className="grid w-full grid-cols-3 lg:w-[400px] mx-auto">
+          <TabsList className="grid w-full grid-cols-4 lg:w-[520px] mx-auto">
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
             <TabsTrigger value="visualizations">Visualizations</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="your-data">Your Data</TabsTrigger>
           </TabsList>
 
           {/* Dashboard Tab */}
