@@ -1,6 +1,14 @@
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 export type ModuleType = 'taxonomy' | 'otolith' | 'edna' | 'biodiversity';
+
+const moduleLabels: Record<ModuleType, string> = {
+  taxonomy: 'Taxonomy',
+  otolith: 'Otolith',
+  edna: 'eDNA',
+  biodiversity: 'Biodiversity',
+};
 
 export async function saveAnalysisResult({
   module,
@@ -19,6 +27,7 @@ export async function saveAnalysisResult({
   const user = session?.user ?? null;
   if (!user) {
     console.warn('Skipping analysis save: no authenticated session');
+    toast.info('Sign in to save your analyses to the dashboard');
     return null;
   }
 
@@ -33,6 +42,9 @@ export async function saveAnalysisResult({
 
   if (error) {
     console.error('Failed to save analysis result:', error);
+    toast.error(`Failed to save ${moduleLabels[module]} analysis`);
+  } else {
+    toast.success(`${moduleLabels[module]} analysis saved to dashboard`);
   }
 }
 
