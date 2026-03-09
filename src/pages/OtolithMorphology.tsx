@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Microscope, Send, Loader2, ArrowLeft, Upload, X, Image, Trash2 } from 'lucide-react';
+import { Microscope, Send, Loader2, ArrowLeft, Upload, X, Image, Trash2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
