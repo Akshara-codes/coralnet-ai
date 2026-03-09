@@ -28,26 +28,28 @@ const CustomTooltip = ({ active, payload }: any) => {
 };
 
 const SpeciesCompositionChart = () => (
-  <ChartContainer config={chartConfig} className="h-56 w-full">
-    <ResponsiveContainer width="100%" height="100%">
-      <PieChart>
-        <Pie
-          data={data}
-          cx="50%"
-          cy="50%"
-          innerRadius={45}
-          outerRadius={80}
-          paddingAngle={3}
-          dataKey="value"
-          stroke="none"
-        >
-          {data.map((entry, i) => (
-            <Cell key={i} fill={entry.color} />
-          ))}
-        </Pie>
-        <Tooltip content={<CustomTooltip />} />
-      </PieChart>
-    </ResponsiveContainer>
+  <div>
+    <ChartContainer config={chartConfig} className="h-56 w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            innerRadius={45}
+            outerRadius={80}
+            paddingAngle={3}
+            dataKey="value"
+            stroke="none"
+          >
+            {data.map((entry, i) => (
+              <Cell key={i} fill={entry.color} />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} />
+        </PieChart>
+      </ResponsiveContainer>
+    </ChartContainer>
     <div className="flex flex-wrap justify-center gap-3 mt-2">
       {data.map((d, i) => (
         <div key={i} className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -56,7 +58,7 @@ const SpeciesCompositionChart = () => (
         </div>
       ))}
     </div>
-  </ChartContainer>
+  </div>
 );
 
 export default SpeciesCompositionChart;
