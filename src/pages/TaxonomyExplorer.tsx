@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { TreePine, Send, Loader2, ArrowLeft, Search, Trash2 } from 'lucide-react';
+import { TreePine, Send, Loader2, ArrowLeft, Search, Trash2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
