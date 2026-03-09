@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Microscope, Send, Loader2, ArrowLeft, Upload, X, Image, Trash2 } from 'lucide-react';
+import { Microscope, Send, Loader2, ArrowLeft, Upload, X, Image, Trash2, Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
@@ -8,6 +8,7 @@ import { streamOtolith, type OtolithMessage } from '@/lib/otolithService';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { exportChatToPdf } from '@/lib/pdfExport';
 
 type DisplayMessage = {
   id: number;
@@ -215,9 +216,14 @@ const OtolithMorphology = () => {
                 <p className="text-sm text-muted-foreground">AI-powered otolith shape analysis & age estimation</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" onClick={handleClear}>
-              <Trash2 className="w-4 h-4 mr-1" /> Clear
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={() => exportChatToPdf({ title: 'Otolith Morphology', messages: messages.map(m => ({ text: m.text, isBot: m.isBot })) })} disabled={messages.length <= 1}>
+                <Download className="w-4 h-4 mr-1" /> Export PDF
+              </Button>
+              <Button variant="outline" size="sm" onClick={handleClear}>
+                <Trash2 className="w-4 h-4 mr-1" /> Clear
+              </Button>
+            </div>
           </div>
         </motion.div>
 

@@ -4,11 +4,12 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Send, Loader2, Trash2, Fish, Search } from 'lucide-react';
+import { ArrowLeft, Send, Loader2, Trash2, Fish, Search, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { streamBiodiversity } from '@/lib/biodiversityService';
 import { ChatMessage } from '@/lib/chatService';
+import { exportChatToPdf } from '@/lib/pdfExport';
 
 type DisplayMessage = { id: number; text: string; isBot: boolean };
 
@@ -113,9 +114,14 @@ const BiodiversityAssessment = () => {
               <h1 className="text-xl font-bold">Biodiversity Assessment</h1>
             </div>
           </div>
-          <Button variant="outline" size="sm" onClick={handleClear}>
-            <Trash2 className="w-4 h-4 mr-1" /> Clear
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => exportChatToPdf({ title: 'Biodiversity Assessment', messages: messages.map(m => ({ text: m.text, isBot: m.isBot })) })} disabled={messages.length <= 1}>
+              <Download className="w-4 h-4 mr-1" /> Export PDF
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleClear}>
+              <Trash2 className="w-4 h-4 mr-1" /> Clear
+            </Button>
+          </div>
         </div>
 
         {/* Messages */}
