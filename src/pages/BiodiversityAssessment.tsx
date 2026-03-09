@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Send, Loader2, Trash2, Fish, Search } from 'lucide-react';
+import { ArrowLeft, Send, Loader2, Trash2, Fish, Search, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { streamBiodiversity } from '@/lib/biodiversityService';
