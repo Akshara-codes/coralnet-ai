@@ -149,6 +149,85 @@ const About = () => {
           </div>
         </motion.div>
 
+        {/* Project Milestones Timeline */}
+        <motion.div
+          className="mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.0 }}
+        >
+          <h2 className="text-3xl font-bold text-center mb-12 text-gradient-aqua">
+            Project Milestones
+          </h2>
+          <div className="relative">
+            {/* Timeline line */}
+            <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-primary/30 hidden md:block" />
+
+            {[
+              {
+                year: '2019',
+                title: 'Project Inception',
+                description: 'CMLRE initiated the AI-driven marine biodiversity platform under the Ministry of Earth Sciences.',
+                side: 'left' as const,
+              },
+              {
+                year: '2020',
+                title: 'eDNA Module Launch',
+                description: 'Environmental DNA analysis pipeline deployed for metabarcoding-based species detection.',
+                side: 'right' as const,
+              },
+              {
+                year: '2021',
+                title: 'Otolith AI Classification',
+                description: 'Deep learning model trained on 10,000+ otolith images for automated fish species identification.',
+                side: 'left' as const,
+              },
+              {
+                year: '2022',
+                title: 'EEZ-Wide Monitoring',
+                description: 'Platform coverage expanded to all sectors of India\'s 2.02M sq km Exclusive Economic Zone.',
+                side: 'right' as const,
+              },
+              {
+                year: '2023',
+                title: 'Taxonomy Explorer',
+                description: 'AI-powered taxonomic classification tool released with 15,000+ species in the database.',
+                side: 'left' as const,
+              },
+              {
+                year: '2024',
+                title: 'Public Platform Release',
+                description: 'Full platform opened to 500+ researchers across 30+ institutions with real-time analytics.',
+                side: 'right' as const,
+              },
+            ].map((milestone, index) => (
+              <motion.div
+                key={milestone.year}
+                className={`flex items-center mb-10 md:mb-12 ${
+                  milestone.side === 'left' ? 'md:flex-row' : 'md:flex-row-reverse'
+                } flex-col md:flex-row`}
+                initial={{ opacity: 0, x: milestone.side === 'left' ? -40 : 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 1.2 + index * 0.15 }}
+              >
+                <div className={`md:w-5/12 ${milestone.side === 'left' ? 'md:text-right md:pr-8' : 'md:text-left md:pl-8'}`}>
+                  <div className="glass-panel p-5 hover:bg-glass-bg/30 transition-all duration-300">
+                    <span className="text-xs font-bold text-primary tracking-wider uppercase">{milestone.year}</span>
+                    <h3 className="text-lg font-semibold text-foreground mt-1 mb-2">{milestone.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{milestone.description}</p>
+                  </div>
+                </div>
+
+                {/* Center dot */}
+                <div className="hidden md:flex md:w-2/12 justify-center">
+                  <div className="w-4 h-4 rounded-full bg-primary shadow-lg shadow-primary/40 ring-4 ring-primary/20" />
+                </div>
+
+                <div className="hidden md:block md:w-5/12" />
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
       </div>
     </div>
