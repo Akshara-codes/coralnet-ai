@@ -2,20 +2,41 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send } from 'lucide-react';
 import { toast } from 'sonner';
+import { z } from 'zod';
 
 const CONTACT_EMAIL = 'akshara.studyjams@gmail.com';
 
+const contactSchema = z.object({
+  name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be under 100 characters'),
+  email: z.string().trim().email('Please enter a valid email').max(255, 'Email must be under 255 characters'),
+  message: z.string().trim().min(1, 'Message is required').max(1000, 'Message must be under 1000 characters'),
+});
+
 const Contact = () => {
-  const [message, setMessage] = useState('');
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
   const [sending, setSending] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!message.trim()) return;
+
+    const validation = contactSchema.safeParse(formData);
+    if (!validation.success) {
+      toast.error(validation.error.issues[0]?.message || 'Please check your inputs.');
+      return;
+    }
 
     setSending(true);
-    const subject = encodeURIComponent('Message from Marine Biodiversity Platform');
-    const body = encodeURIComponent(message);
+
+    const cleanData = validation.data;
+    const subject = encodeURIComponent(`Contact message from ${cleanData.name}`);
+    const body = encodeURIComponent(
+      `Name: ${cleanData.name}\nEmail: ${cleanData.email}\n\nMessage:\n${cleanData.message}`,
+    );
+
     window.open(`mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`, '_blank');
     toast.success('Email client opened! Send your message from there.');
     setSending(false);
@@ -55,23 +76,56 @@ const Contact = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
+              <label htmlFor="name" className="block text-sm font-medium mb-2 text-foreground">
+                Name
+              </label>
+              <input
+                id="name"
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
+                className="w-full px-4 py-3 bg-glass-bg/30 border border-glass-border/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 aqua-glow text-foreground"
+                placeholder="Your full name"
+                required
+                maxLength={100}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-2 text-foreground">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                className="w-full px-4 py-3 bg-glass-bg/30 border border-glass-border/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 aqua-glow text-foreground"
+                placeholder="your.email@example.com"
+                required
+                maxLength={255}
+              />
+            </div>
+
+            <div>
               <label htmlFor="message" className="block text-sm font-medium mb-2 text-foreground">
                 Message
               </label>
               <textarea
                 id="message"
                 rows={8}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                value={formData.message}
+                onChange={(e) => setFormData((prev) => ({ ...prev, message: e.target.value }))}
                 className="w-full px-4 py-3 bg-glass-bg/30 border border-glass-border/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 aqua-glow resize-none text-foreground"
                 placeholder="Tell us about your research interests, collaboration ideas, or technical questions..."
                 required
+                maxLength={1000}
               />
             </div>
 
             <motion.button
               type="submit"
-              disabled={sending || !message.trim()}
+              disabled={sending || !formData.message.trim() || !formData.name.trim() || !formData.email.trim()}
               className="w-full bg-primary text-primary-foreground py-3 px-6 rounded-lg font-semibold hover:bg-primary-glow transition-all duration-300 aqua-glow flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
